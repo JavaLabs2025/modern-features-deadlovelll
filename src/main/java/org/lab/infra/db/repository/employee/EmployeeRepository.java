@@ -16,9 +16,9 @@ public class EmployeeRepository {
         return new Employee();
     }
 
-    public Employee create(Employee employee) throws SQLException {
+    public Employee create(Employee employee) {
         String sql = """
-        INSERT INTO employees (name, age, type, createdBy, createdDate)
+        INSERT INTO employees (name, age, type, created_by, create_date)
         VALUES (?, ?, ?, ?, ?)
         RETURNING *
         """;
@@ -37,11 +37,23 @@ public class EmployeeRepository {
                     System.out.println("mapping should be here");
                 }
             }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
         return employee;
     }
 
     public Object delete(int id) {
+        String sql = "DELETE FROM employees WHERE id = ?";
+
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
         return null;
     }
 
