@@ -16,7 +16,7 @@ public class EmployeeCreateAdapter {
     private final ObjectMapper mapper = new ObjectMapper();
     private final CreateEmployeeUseCase useCase = new CreateEmployeeUseCase();
 
-    public Context getEmployee(
+    public Context createEmployee(
             Context ctx
     ) {
         try {
@@ -37,6 +37,7 @@ public class EmployeeCreateAdapter {
 
         } catch (NotPermittedException e) {
             return ctx.status(403).json(Map.of("error", e.getMessage()));
+
         } catch (Exception e) {
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
