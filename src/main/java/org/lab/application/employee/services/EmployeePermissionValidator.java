@@ -1,0 +1,18 @@
+package org.lab.application.employee.services;
+
+import org.lab.core.constants.employee.EmployeeType;
+import org.lab.domain.emploee.model.Employee;
+import org.lab.domain.shared.exceptions.NotPermittedException;
+import org.lab.infra.db.repository.employee.EmployeeRepository;
+
+public class EmployeePermissionValidator {
+
+    private final EmployeeRepository employeeRepository = new EmployeeRepository();
+
+    public void validate(int employeeId) {
+        Employee creatorEmployee = employeeRepository.getById(employeeId);
+        if (creatorEmployee.getType() != EmployeeType.MANAGER) {
+            throw new NotPermittedException("Only manager can work with employees");
+        }
+    }
+}

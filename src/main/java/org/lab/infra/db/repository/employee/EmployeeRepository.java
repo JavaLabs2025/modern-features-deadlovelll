@@ -31,7 +31,9 @@ public class EmployeeRepository {
             stmt.setInt(2, employee.getAge());
             stmt.setString(3, employee.getType().name());
             stmt.setInt(4, employee.getCreatedBy());
-            stmt.setTimestamp(5, new Timestamp(employee.getCreatedDate().getTime()));
+            stmt.setTimestamp(5, new Timestamp(
+                    employee.getCreatedDate().getTime())
+            );
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     System.out.println("mapping should be here");

@@ -6,11 +6,11 @@ import org.lab.domain.emploee.model.Employee;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
-import org.lab.core.constants.employee.EmployeeType;
 
 public class CreateValidator {
 
-    private EmployeeRepository employeeRepository = new EmployeeRepository();
+    private final EmployeePermissionValidator validator = new EmployeePermissionValidator();
+    private final EmployeeRepository employeeRepository = new EmployeeRepository();
 
     public void validate(
             Employee employee,
@@ -21,10 +21,7 @@ public class CreateValidator {
     {
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()){
             scope.fork(() -> {
-                Employee creatorEmployee = employeeRepository.getById(creatorId);
-                if (creatorEmployee.getType() != EmployeeType.MANAGER) {
-                    throw new NotPermittedException("Only manager can add employees");
-                }
+                validator.validate(creatorId);
                 return null;
             });
             scope.fork(() -> {
