@@ -39,6 +39,20 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 }
 
+tasks.register<Jar>("fatJar") {
+    archiveClassifier.set("all")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes["Main-Class"] = "org.lab.Main"
+    }
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+    })
+}
+
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("--enable-preview")
 }
