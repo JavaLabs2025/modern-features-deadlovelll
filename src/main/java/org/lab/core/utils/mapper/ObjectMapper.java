@@ -6,17 +6,20 @@ import org.lab.domain.interfaces.PresentationObject;
 
 public class ObjectMapper {
 
+    private final com.fasterxml.jackson.databind.ObjectMapper mapper =
+            new com.fasterxml.jackson.databind.ObjectMapper();
+
     public <T extends DomainObject> T mapToDomain(
             PresentationObject presentationObject,
             Class<T> domainClass
     ) {
-        return null;
+        return mapper.convertValue(presentationObject, domainClass);
     }
 
     public <T extends PresentationObject> T mapToPresentation(
             DomainObject  domainObject,
             Class<T> presentationObjectClass
     ) {
-        return null;
+        return mapper.convertValue(domainObject, presentationObjectClass);
     }
 }
