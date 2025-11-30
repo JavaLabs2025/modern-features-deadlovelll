@@ -25,6 +25,9 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("org.postgresql:postgresql:42.7.8")
     implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.17.2")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.2")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
