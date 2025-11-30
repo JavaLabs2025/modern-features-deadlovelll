@@ -14,7 +14,7 @@ public class EmployeeRepository {
         return new Employee();
     }
 
-    public Employee create(String name) {
+    public Employee create(Employee employee) {
         return new Employee();
     }
 

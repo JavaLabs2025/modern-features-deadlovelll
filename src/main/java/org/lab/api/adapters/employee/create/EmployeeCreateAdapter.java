@@ -6,6 +6,7 @@ import org.lab.application.employee.dto.create.CreateEmployeeDTO;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.application.employee.use_cases.create.CreateEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
+import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 
 public class EmployeeCreateAdapter {
 
@@ -17,14 +18,22 @@ public class EmployeeCreateAdapter {
     ) {
         try {
             Employee employee = mapper.mapToDomain(createEmployeeDTO, Employee.class);
-            Employee createdEmployee = useCase.execute(employee);
+            Employee createdEmployee = useCase.execute(
+                    employee,
+                    createEmployeeDTO.creatorId()
+            );
             GetEmployeeDTO presentationEmployee = mapper.mapToPresentation(
                     createdEmployee,
                     GetEmployeeDTO.class
             );
             return presentationEmployee;
+
         } catch (NotPermittedException e) {
             System.err.println(e.getMessage());
+            return null;
+
+        } catch (UserAlreadyExistsException e) {
+            System.err.println("user already exists!!!");
             return null;
         }
     }
