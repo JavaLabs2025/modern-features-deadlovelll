@@ -3,7 +3,7 @@ package org.lab.application.employee.dto.create;
 import java.util.Date;
 
 import org.lab.core.constants.employee.EmployeeType;
-import org.lab.application.s
+import org.lab.domain.interfaces.PresentationObject;
 
 public record CreateEmployeeDTO(
         int id,
@@ -12,5 +12,5 @@ public record CreateEmployeeDTO(
         EmployeeType type,
         int createdBy,
         Date createdDate
-) {
+) implements PresentationObject {
 }
