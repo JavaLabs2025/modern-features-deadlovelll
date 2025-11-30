@@ -5,16 +5,17 @@ import org.lab.domain.interfaces.PresentationObject;
 
 
 public class ObjectMapper {
-    public Object mapToDomain(
+
+    public <T extends DomainObject> T mapToDomain(
             PresentationObject presentationObject,
-            DomainObject  domainObject
+            Class<T> domainClass
     ) {
         return null;
     }
 
-    public Object mapToPresentation(
-            PresentationObject presentationObject,
-            DomainObject  domainObject
+    public <T extends PresentationObject> T mapToPresentation(
+            DomainObject  domainObject,
+            Class<T> presentationObjectClass
     ) {
         return null;
     }
