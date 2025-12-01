@@ -1,11 +1,11 @@
-package org.lab.api.adapters.employee.create;
+package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
 import org.lab.core.utils.mapper.ObjectMapper;
-import org.lab.application.employee.dto.get.GetEmployeeDTO;
-import org.lab.application.employee.dto.create.CreateEmployeeDTO;
+import org.lab.application.employee.dto.GetEmployeeDTOOut;
+import org.lab.application.employee.dto.CreateEmployeeDTO;
 import org.lab.domain.emploee.model.Employee;
-import org.lab.application.employee.use_cases.create.CreateEmployeeUseCase;
+import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 
@@ -26,9 +26,9 @@ public class EmployeeCreateAdapter {
                     employee,
                     dto.creatorId()
             );
-            GetEmployeeDTO presentationEmployee = mapper.mapToPresentation(
+            GetEmployeeDTOOut presentationEmployee = mapper.mapToPresentation(
                     createdEmployee,
-                    GetEmployeeDTO.class
+                    GetEmployeeDTOOut.class
             );
             return ctx.status(201).json(presentationEmployee);
 

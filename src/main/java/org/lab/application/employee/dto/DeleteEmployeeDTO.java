@@ -1,4 +1,4 @@
-package org.lab.application.employee.dto.delete;
+package org.lab.application.employee.dto;
 
 import org.lab.domain.interfaces.PresentationObject;
 

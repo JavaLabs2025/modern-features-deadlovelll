@@ -1,9 +1,8 @@
-package org.lab.api.adapters.employee.delete;
+package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
-import org.lab.application.employee.dto.delete.DeleteEmployeeDTO;
-import org.lab.domain.emploee.model.Employee;
-import org.lab.application.employee.use_cases.delete.DeleteEmployeeUseCase;
+import org.lab.application.employee.dto.DeleteEmployeeDTO;
+import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 
 import java.util.Map;

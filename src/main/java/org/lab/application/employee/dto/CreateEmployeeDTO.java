@@ -1,4 +1,4 @@
-package org.lab.application.employee.dto.create;
+package org.lab.application.employee.dto;
 
 import org.lab.core.constants.employee.EmployeeType;
 import org.lab.domain.interfaces.PresentationObject;

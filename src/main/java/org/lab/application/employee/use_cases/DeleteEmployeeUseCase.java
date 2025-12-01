@@ -1,4 +1,4 @@
-package org.lab.application.employee.use_cases.delete;
+package org.lab.application.employee.use_cases;
 
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.application.employee.services.EmployeePermissionValidator;
