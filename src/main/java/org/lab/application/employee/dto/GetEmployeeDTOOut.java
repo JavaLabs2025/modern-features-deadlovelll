@@ -15,8 +15,3 @@ public record GetEmployeeDTOOut(
 ) implements PresentationObject {
 }
 
-public record GetEmployeeDTOIn(
-        int employeeId,
-        int actorId
-) implements PresentationObject {
-}
