@@ -17,6 +17,6 @@ public class Main {
 
         app.post("/employee", createEmployeeAdapter::createEmployee);
         app.delete("/employee", deleteEmployeeAdapter::deleteEmployee);
-        app.get("/employee/:id", getEmployeeAdapter::getEmployee);
+        app.get("/employee", getEmployeeAdapter::getEmployee);
     }
 }

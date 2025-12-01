@@ -2,17 +2,45 @@ package org.lab.infra.db.repository.employee;
 
 import org.lab.domain.emploee.model.Employee;
 import org.lab.infra.db.client.DatabaseClient;
+import org.lab.core.utils.mapper.ObjectMapper;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EmployeeRepository {
-    private DatabaseClient databaseClient;
+    private final DatabaseClient databaseClient;
+    private final ObjectMapper objectMapper;
 
     public EmployeeRepository() {
         databaseClient = new DatabaseClient();
+        objectMapper = new ObjectMapper();
     }
 
     public Employee getById(int id) {
+        String sql = "SELECT * FROM EMPLOYEES where id = ?";
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    Map<String, Object> raw = new HashMap<>();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metaData.getColumnLabel(i);
+                        Object value = rs.getObject(i);
+                        raw.put(columnName, value);
+                    }
+                    System.out.println("value = " + raw);
+                    return objectMapper.mapFromRaw(raw, Employee.class);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
         return new Employee();
     }
 
@@ -47,7 +75,6 @@ public class EmployeeRepository {
 
     public Object delete(int id) {
         String sql = "DELETE FROM employees WHERE id = ?";
-
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)

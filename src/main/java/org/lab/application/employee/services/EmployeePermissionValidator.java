@@ -11,6 +11,8 @@ public class EmployeePermissionValidator {
 
     public void validate(int employeeId) {
         Employee creatorEmployee = employeeRepository.getById(employeeId);
+        System.out.println("hello");
+        System.out.println(creatorEmployee);
         if (creatorEmployee.getType() != EmployeeType.MANAGER) {
             throw new NotPermittedException("Only manager can work with employees");
         }

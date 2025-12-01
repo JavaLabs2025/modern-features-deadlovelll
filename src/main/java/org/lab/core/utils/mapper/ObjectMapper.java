@@ -22,4 +22,11 @@ public class ObjectMapper {
     ) {
         return mapper.convertValue(domainObject, presentationObjectClass);
     }
+
+    public <T extends DomainObject> T mapFromRaw(
+            Object rawObject,
+            Class<T> domainClass
+    ) {
+        return mapper.convertValue(rawObject, domainClass);
+    }
 }

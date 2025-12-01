@@ -19,7 +19,10 @@ public class EmployeeGetAdapter {
             Context ctx
     ) {
         try {
-            GetEmployeeDTOIn dto = ctx.bodyAsClass(GetEmployeeDTOIn.class);
+            GetEmployeeDTOIn dto = new GetEmployeeDTOIn(
+                    Integer.parseInt(ctx.queryParam("employeeId")),
+                    Integer.parseInt(ctx.queryParam("actorId"))
+            );
             Employee receivedEmployee = useCase.execute(
                     dto.employeeId(),
                     dto.actorId()
@@ -34,6 +37,7 @@ public class EmployeeGetAdapter {
             return ctx.status(403).json(Map.of("error", e.getMessage()));
 
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }
