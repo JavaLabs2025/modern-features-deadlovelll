@@ -1,4 +1,5 @@
 package org.lab.domain.interfaces;
 
-public interface PresentationObject {
+public non-sealed interface PresentationObject
+        extends AppObject {
 }
