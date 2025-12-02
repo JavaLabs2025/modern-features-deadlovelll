@@ -14,6 +14,10 @@ public class ProjectRepository {
         objectMapper = new ObjectMapper();
     }
 
+    public Project get(int projectId) {
+        return new Project();
+    }
+
     public Project create(Project project) {
         return new Project();
     }
