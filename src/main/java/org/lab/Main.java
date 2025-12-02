@@ -4,13 +4,16 @@ import io.javalin.Javalin;
 import org.lab.api.adapters.employee.EmployeeCreateAdapter;
 import org.lab.api.adapters.employee.EmployeeDeleteAdapter;
 import org.lab.api.adapters.employee.EmployeeGetAdapter;
+import org.lab.api.adapters.project.ProjectCreateAdapter;
 import org.lab.application.employee.services.CreateValidator;
-import org.lab.application.employee.services.EmployeePermissionValidator;
+import org.lab.application.project.use_cases.CreateProjectUseCase;
+import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
+import org.lab.infra.db.repository.project.ProjectRepository;
 
 public class Main {
 
@@ -47,10 +50,22 @@ public class Main {
                 new ObjectMapper()
         );
 
+        ProjectCreateAdapter createProjectAdapter = new ProjectCreateAdapter(
+                new ObjectMapper(),
+                new CreateProjectUseCase(
+                        new ProjectRepository(),
+                        new EmployeePermissionValidator(
+                                new EmployeeRepository()
+                        )
+                )
+        );
+
         app.get("/", ctx -> ctx.result("Hello World"));
 
         app.post("/employee", createEmployeeAdapter::createEmployee);
         app.delete("/employee", deleteEmployeeAdapter::deleteEmployee);
         app.get("/employee", getEmployeeAdapter::getEmployee);
+
+        app.post("/project", createProjectAdapter::createProject);
     }
 }

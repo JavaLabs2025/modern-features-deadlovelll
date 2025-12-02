@@ -1,13 +1,11 @@
 package org.lab.application.employee.use_cases;
 
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.lab.application.employee.services.EmployeePermissionValidator;
+import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.core.constants.employee.EmployeeType;
 import org.lab.domain.emploee.model.Employee;

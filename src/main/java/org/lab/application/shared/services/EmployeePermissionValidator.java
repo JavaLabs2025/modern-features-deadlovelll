@@ -1,4 +1,4 @@
-package org.lab.application.employee.services;
+package org.lab.application.shared.services;
 
 import org.lab.core.constants.employee.EmployeeType;
 import org.lab.domain.emploee.model.Employee;

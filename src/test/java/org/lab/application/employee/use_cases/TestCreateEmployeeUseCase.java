@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.lab.application.employee.services.EmployeePermissionValidator;
+import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 import org.lab.application.employee.services.CreateValidator;

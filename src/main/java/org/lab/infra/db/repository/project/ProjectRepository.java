@@ -1,6 +1,7 @@
 package org.lab.infra.db.repository.project;
 
 import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.domain.project.model.Project;
 import org.lab.infra.db.client.DatabaseClient;
 
 public class ProjectRepository {
@@ -11,5 +12,9 @@ public class ProjectRepository {
     public ProjectRepository() {
         databaseClient = new DatabaseClient();
         objectMapper = new ObjectMapper();
+    }
+
+    public Project create(Project project) {
+        return new Project();
     }
 }
