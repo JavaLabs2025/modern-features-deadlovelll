@@ -4,14 +4,10 @@ import java.util.concurrent.*;
 
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
-import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
-import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
 import org.lab.infra.db.repository.project.ProjectRepository;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
-
-public record Pair(Project project, Employee employee) {}
 
 public class GetValidator {
 
@@ -30,8 +26,8 @@ public class GetValidator {
             int projectId,
             int employeeId
     )
-            throws NotPermittedException,
-            UserAlreadyExistsException
+            throws ProjectNotFoundException,
+            UserNotFoundException
     {
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()){
             var projectFuture = scope.fork(() -> {

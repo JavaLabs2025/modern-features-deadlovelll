@@ -5,13 +5,17 @@ import org.lab.api.adapters.employee.EmployeeCreateAdapter;
 import org.lab.api.adapters.employee.EmployeeDeleteAdapter;
 import org.lab.api.adapters.employee.EmployeeGetAdapter;
 import org.lab.api.adapters.project.ProjectCreateAdapter;
+import org.lab.api.adapters.project.ProjectGetAdapter;
 import org.lab.application.employee.services.CreateValidator;
+import org.lab.application.project.services.GetValidator;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
+import org.lab.application.project.use_cases.GetProjectUseCase;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.domain.project.services.ProjectMembershipValidator;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.infra.db.repository.project.ProjectRepository;
 
@@ -59,6 +63,16 @@ public class Main {
                         )
                 )
         );
+        ProjectGetAdapter projectGetAdapter = new ProjectGetAdapter(
+                new GetProjectUseCase(
+                        new GetValidator(
+                                new ProjectRepository(),
+                                new EmployeeRepository()
+                        ),
+                        new ProjectMembershipValidator()
+                ),
+                new ObjectMapper()
+        );
 
         app.get("/", ctx -> ctx.result("Hello World"));
 
@@ -67,5 +81,6 @@ public class Main {
         app.get("/employee", getEmployeeAdapter::getEmployee);
 
         app.post("/project", createProjectAdapter::createProject);
+        app.get("/project", projectGetAdapter::getProject);
     }
 }

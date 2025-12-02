@@ -9,16 +9,13 @@ import org.lab.domain.project.services.ProjectMembershipValidator;
 
 public class GetProjectUseCase {
 
-    private final ProjectRepository projectRepository;
     private final GetValidator getValidator;
     private final ProjectMembershipValidator projectMembershipValidator;
 
     public GetProjectUseCase(
-            ProjectRepository projectRepository,
             GetValidator getValidator,
             ProjectMembershipValidator projectMembershipValidator
     ) {
-        this.projectRepository = projectRepository;
         this.getValidator = getValidator;
         this.projectMembershipValidator = projectMembershipValidator;
     }
