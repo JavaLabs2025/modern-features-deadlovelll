@@ -9,7 +9,13 @@ import java.util.Map;
 
 public class EmployeeDeleteAdapter {
 
-    private final DeleteEmployeeUseCase useCase = new DeleteEmployeeUseCase();
+    private final DeleteEmployeeUseCase useCase;
+
+    public EmployeeDeleteAdapter(
+            DeleteEmployeeUseCase useCase
+    ) {
+        this.useCase = useCase;
+    }
 
     public Context deleteEmployee(
             Context ctx

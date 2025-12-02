@@ -9,8 +9,16 @@ import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 
 public class CreateValidator {
 
-    private final EmployeePermissionValidator validator = new EmployeePermissionValidator();
-    private final EmployeeRepository employeeRepository = new EmployeeRepository();
+    private final EmployeePermissionValidator validator;
+    private final EmployeeRepository employeeRepository;
+
+    public CreateValidator(
+            EmployeePermissionValidator validator,
+            EmployeeRepository employeeRepository
+    ) {
+        this.validator = validator;
+        this.employeeRepository = employeeRepository;
+    }
 
     public void validate(
             Employee employee,

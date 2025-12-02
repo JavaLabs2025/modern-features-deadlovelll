@@ -1,0 +1,135 @@
+package org.lab.application.employee.use_cases;
+
+import java.util.concurrent.ExecutionException;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import org.lab.application.employee.services.EmployeePermissionValidator;
+import org.lab.domain.shared.exceptions.NotPermittedException;
+import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
+import org.lab.application.employee.services.CreateValidator;
+import org.lab.core.constants.employee.EmployeeType;
+import org.lab.domain.emploee.model.Employee;
+import org.lab.infra.db.repository.employee.EmployeeRepository;
+
+public class TestCreateEmployeeUseCase {
+
+    private EmployeeRepository employeeRepository;
+    private EmployeePermissionValidator validator;
+    private CreateValidator createValidator;
+    private CreateEmployeeUseCase useCase;
+
+    @BeforeEach
+    public void setUp() {
+        employeeRepository = Mockito.mock(EmployeeRepository.class);
+        validator = new EmployeePermissionValidator(employeeRepository);
+        createValidator = new CreateValidator(validator, employeeRepository);
+        useCase = new CreateEmployeeUseCase(employeeRepository, createValidator);
+    }
+
+    @Test
+    public void testCreateEmployeeSuccess() {
+        Employee input = new Employee();
+        input.setName("Tim Cock");
+        input.setAge(12);
+        input.setType(EmployeeType.PROGRAMMER);
+
+        Employee saved = new Employee();
+        saved.setId(100);
+        saved.setName("Tim Cock");
+
+        Mockito.when(employeeRepository.create(input)).thenReturn(saved);
+
+        Employee creator = new Employee();
+        creator.setId(1);
+        creator.setType(EmployeeType.MANAGER);
+        Mockito.when(employeeRepository.getById(1)).thenReturn(creator);
+
+        Employee result = useCase.execute(input, 1);
+
+        Assertions.assertEquals(100, result.getId());
+
+        Mockito.verify(employeeRepository).create(input);
+        Mockito.verify(employeeRepository).getById(1);
+    }
+
+    @Test
+    public void testCreateEmployeeRaisesUserAlreadyExistsException() {
+        Employee input = new Employee();
+        input.setId(123);
+        input.setName("Tim Cock");
+
+        Employee creator = new Employee();
+        creator.setId(1);
+        creator.setType(EmployeeType.PROGRAMMER);
+
+        Mockito.when(employeeRepository.getById(1)).thenReturn(creator);
+        Mockito.when(employeeRepository.getById(123)).thenReturn(input);
+
+        RuntimeException thrown = Assertions.assertThrows(
+                RuntimeException.class,
+                () -> useCase.execute(input, 1)
+        );
+
+        Assertions.assertTrue(
+                thrown.getCause() instanceof ExecutionException &&
+                        ((ExecutionException) thrown.getCause()).getCause() instanceof UserAlreadyExistsException
+        );
+        Mockito.verify(employeeRepository).getById(123);
+    }
+
+    @Test
+    public void testCreateEmployeeRaisesNotPermittedException() {
+        Employee input = new Employee();
+        input.setId(123);
+        input.setName("Tim Cock");
+
+        Employee creator = new Employee();
+        creator.setId(1);
+        creator.setType(EmployeeType.PROGRAMMER);
+
+        Mockito.when(employeeRepository.getById(1)).thenReturn(creator);
+        Mockito.when(employeeRepository.getById(123)).thenReturn(null);
+
+        RuntimeException thrown = Assertions.assertThrows(
+                RuntimeException.class,
+                () -> useCase.execute(input, 1)
+        );
+
+        Assertions.assertTrue(
+                thrown.getCause() instanceof ExecutionException &&
+                        ((ExecutionException) thrown.getCause()).getCause() instanceof NotPermittedException
+        );
+        Mockito.verify(employeeRepository).getById(123);
+        Mockito.verify(employeeRepository).getById(1);
+    }
+
+    @Test
+    public void testCreateEmployeeRaisesRuntimeException() {
+        Employee input = new Employee();
+        input.setId(123);
+        input.setName("Tim Cock");
+
+        Employee creator = new Employee();
+        creator.setId(1);
+        creator.setType(EmployeeType.PROGRAMMER);
+
+        Mockito.when(employeeRepository.getById(1)).thenThrow(new RuntimeException());
+        Mockito.when(employeeRepository.getById(123)).thenThrow(new RuntimeException());
+
+        RuntimeException thrown = Assertions.assertThrows(
+                RuntimeException.class,
+                () -> useCase.execute(input, 1)
+        );
+
+        Assertions.assertTrue(
+                thrown.getCause() instanceof ExecutionException &&
+                        ((ExecutionException) thrown.getCause()).getCause() instanceof RuntimeException
+        );
+        Mockito.verify(employeeRepository).getById(123);
+        Mockito.verify(employeeRepository).getById(1);
+    }
+}

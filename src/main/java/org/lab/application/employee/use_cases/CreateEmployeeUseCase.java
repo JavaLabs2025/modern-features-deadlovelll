@@ -6,8 +6,16 @@ import org.lab.application.employee.services.CreateValidator;
 
 public class CreateEmployeeUseCase {
 
-    private final EmployeeRepository employeeRepository = new EmployeeRepository();
-    private final CreateValidator createValidator = new CreateValidator();
+    private final EmployeeRepository employeeRepository;
+    private final CreateValidator createValidator;
+
+    public CreateEmployeeUseCase(
+            EmployeeRepository employeeRepository,
+            CreateValidator createValidator
+    ) {
+        this.employeeRepository = employeeRepository;
+        this.createValidator = createValidator;
+    }
 
     public Employee execute(
             Employee employee,

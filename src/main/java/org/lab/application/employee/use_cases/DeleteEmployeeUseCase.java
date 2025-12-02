@@ -5,8 +5,16 @@ import org.lab.application.employee.services.EmployeePermissionValidator;
 
 public class DeleteEmployeeUseCase {
 
-    private final EmployeeRepository employeeRepository = new EmployeeRepository();
-    private final EmployeePermissionValidator validator = new EmployeePermissionValidator();
+    private final EmployeeRepository employeeRepository;
+    private final EmployeePermissionValidator validator;
+
+    public DeleteEmployeeUseCase(
+            EmployeeRepository employeeRepository,
+            EmployeePermissionValidator validator
+    ) {
+        this.employeeRepository = employeeRepository;
+        this.validator = validator;
+    }
 
     public void execute(
             int deleteEmployeeId,

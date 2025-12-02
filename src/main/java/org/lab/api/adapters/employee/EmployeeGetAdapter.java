@@ -12,8 +12,16 @@ import java.util.Map;
 
 public class EmployeeGetAdapter {
 
-    private final GetEmployeeUseCase useCase = new GetEmployeeUseCase();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final GetEmployeeUseCase useCase;
+    private final ObjectMapper mapper;
+
+    public EmployeeGetAdapter(
+            GetEmployeeUseCase useCase,
+            ObjectMapper mapper
+    ) {
+        this.useCase = useCase;
+        this.mapper = mapper;
+    }
 
     public Context getEmployee(
             Context ctx

@@ -13,8 +13,16 @@ import java.util.Map;
 
 public class EmployeeCreateAdapter {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final CreateEmployeeUseCase useCase = new CreateEmployeeUseCase();
+    private final ObjectMapper mapper;
+    private final CreateEmployeeUseCase useCase;
+
+    public EmployeeCreateAdapter(
+            ObjectMapper mapper,
+            CreateEmployeeUseCase useCase
+    ) {
+        this.mapper = mapper;
+        this.useCase = useCase;
+    }
 
     public Context createEmployee(
             Context ctx

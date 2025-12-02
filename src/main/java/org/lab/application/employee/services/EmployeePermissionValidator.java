@@ -7,12 +7,16 @@ import org.lab.infra.db.repository.employee.EmployeeRepository;
 
 public class EmployeePermissionValidator {
 
-    private final EmployeeRepository employeeRepository = new EmployeeRepository();
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeePermissionValidator(
+            EmployeeRepository employeeRepository
+    ) {
+        this.employeeRepository = employeeRepository;
+    }
 
     public void validate(int employeeId) {
         Employee creatorEmployee = employeeRepository.getById(employeeId);
-        System.out.println("hello");
-        System.out.println(creatorEmployee);
         if (creatorEmployee.getType() != EmployeeType.MANAGER) {
             throw new NotPermittedException("Only manager can work with employees");
         }
