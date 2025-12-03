@@ -10,6 +10,7 @@ import org.lab.application.employee.services.CreateValidator;
 import org.lab.application.project.services.GetValidator;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
 import org.lab.application.project.use_cases.GetProjectUseCase;
+import org.lab.application.shared.services.CurrentEmployeeProvider;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
@@ -67,7 +68,9 @@ public class Main {
                 new GetProjectUseCase(
                         new GetValidator(
                                 new ProjectRepository(),
-                                new EmployeeRepository()
+                                new CurrentEmployeeProvider(
+                                        new EmployeeRepository()
+                                )
                         ),
                         new ProjectMembershipValidator()
                 ),

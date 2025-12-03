@@ -43,7 +43,12 @@ public class ProjectGetAdapter {
             return ctx.status(409).json(Map.of("error", "User doesnt exist"));
 
         } catch (NotPermittedException e) {
-            return ctx.status(403).json(Map.of("error", "You do not have permission to perform this operation"));
+            return ctx.status(403).json(
+                    Map.of(
+                            "error",
+                            "You do not have permission to perform this operation"
+                    )
+            );
 
         } catch (ProjectNotFoundException e) {
             return ctx.status(404).json(Map.of("error", "Project doesn't exist"));

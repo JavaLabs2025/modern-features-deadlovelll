@@ -7,19 +7,19 @@ import org.lab.domain.project.model.Project;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
 import org.lab.infra.db.repository.project.ProjectRepository;
-import org.lab.infra.db.repository.employee.EmployeeRepository;
+import org.lab.application.shared.services.CurrentEmployeeProvider;
 
 public class GetValidator {
 
     private final ProjectRepository projectRepository;
-    private final EmployeeRepository employeeRepository;
+    private final CurrentEmployeeProvider currentEmployeeProvider;
 
     public GetValidator(
             ProjectRepository projectRepository,
-            EmployeeRepository employeeRepository
+            CurrentEmployeeProvider currentEmployeeProvider
     ) {
         this.projectRepository = projectRepository;
-        this.employeeRepository = employeeRepository;
+        this.currentEmployeeProvider = currentEmployeeProvider;
     }
 
     public Pair validate(
@@ -38,10 +38,7 @@ public class GetValidator {
                 return project;
             });
             var employeeFuture = scope.fork(() -> {
-                Employee employee = this.employeeRepository.getById(employeeId);
-                if (employee == null) {
-                    throw new UserNotFoundException();
-                }
+                Employee employee = this.currentEmployeeProvider.get(employeeId);
                 return employee;
             });
             scope.join();

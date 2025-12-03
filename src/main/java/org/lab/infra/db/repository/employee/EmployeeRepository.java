@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmployeeRepository {
+    
     private final DatabaseClient databaseClient;
     private final ObjectMapper objectMapper;
 
@@ -18,7 +19,7 @@ public class EmployeeRepository {
     }
 
     public Employee getById(int id) {
-        String sql = "SELECT * FROM EMPLOYEES where id = ?";
+        String sql = "SELECT * FROM employees where id = ?";
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)

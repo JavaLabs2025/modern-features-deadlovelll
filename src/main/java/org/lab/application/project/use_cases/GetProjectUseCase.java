@@ -2,7 +2,6 @@ package org.lab.application.project.use_cases;
 
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
-import org.lab.infra.db.repository.project.ProjectRepository;
 import org.lab.application.project.services.GetValidator;
 import org.lab.application.project.services.Pair;
 import org.lab.domain.project.services.ProjectMembershipValidator;

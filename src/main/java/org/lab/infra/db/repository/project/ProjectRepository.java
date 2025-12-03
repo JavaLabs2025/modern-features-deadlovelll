@@ -1,8 +1,12 @@
 package org.lab.infra.db.repository.project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.model.Project;
 import org.lab.infra.db.client.DatabaseClient;
+import org.lab.infra.db.spec.Specification;
 
 public class ProjectRepository {
 
@@ -21,4 +25,12 @@ public class ProjectRepository {
     public Project create(Project project) {
         return new Project();
     }
+
+    public List<Project> list(
+            Specification specification
+    ) {
+        return new ArrayList<>();
+    }
+
+    public void delete(int projectId) {}
 }

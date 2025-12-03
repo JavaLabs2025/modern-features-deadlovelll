@@ -22,7 +22,7 @@ public class EmployeeDeleteAdapter {
     ) {
         try {
             DeleteEmployeeDTO dto = ctx.bodyAsClass(DeleteEmployeeDTO.class);
-            useCase.execute(dto.deletedEmployeeId(), dto.employeeId());
+            this.useCase.execute(dto.deletedEmployeeId(), dto.employeeId());
             return ctx.status(201);
 
         } catch (NotPermittedException e) {
