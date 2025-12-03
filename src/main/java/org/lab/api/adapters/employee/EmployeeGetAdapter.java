@@ -1,7 +1,7 @@
 package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
-import org.lab.application.employee.dto.GetEmployeeDTOOut;
+import org.lab.application.employee.dto.GetEmployeeDTO;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.emploee.model.Employee;
@@ -32,9 +32,9 @@ public class EmployeeGetAdapter {
                     employeeId,
                     actorId
             );
-            GetEmployeeDTOOut presentationEmployee = mapper.mapToPresentation(
+            GetEmployeeDTO presentationEmployee = mapper.mapToPresentation(
                     receivedEmployee,
-                    GetEmployeeDTOOut.class
+                    GetEmployeeDTO.class
             );
             return ctx.status(201).json(presentationEmployee);
 

@@ -2,7 +2,7 @@ package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
 
-import org.lab.application.employee.dto.GetEmployeeDTOOut;
+import org.lab.application.employee.dto.GetEmployeeDTO;
 import org.lab.application.employee.dto.CreateEmployeeDTO;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
@@ -35,9 +35,9 @@ public class EmployeeCreateAdapter {
                     employee,
                     dto.creatorId()
             );
-            GetEmployeeDTOOut presentationEmployee = mapper.mapToPresentation(
+            GetEmployeeDTO presentationEmployee = mapper.mapToPresentation(
                     createdEmployee,
-                    GetEmployeeDTOOut.class
+                    GetEmployeeDTO.class
             );
             return ctx.status(201).json(presentationEmployee);
 
