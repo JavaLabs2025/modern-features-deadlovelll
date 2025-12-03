@@ -42,7 +42,7 @@ public class EmployeeRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return new Employee();
+        return null;
     }
 
     public Employee create(Employee employee) {
@@ -84,10 +84,6 @@ public class EmployeeRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return null;
-    }
-
-    public Employee update(Employee employee) {
         return null;
     }
 }
