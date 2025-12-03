@@ -1,7 +1,6 @@
 package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
-import org.lab.application.employee.dto.GetEmployeeDTOIn;
 import org.lab.application.employee.dto.GetEmployeeDTOOut;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
@@ -27,13 +26,11 @@ public class EmployeeGetAdapter {
             Context ctx
     ) {
         try {
-            GetEmployeeDTOIn dto = new GetEmployeeDTOIn(
-                    Integer.parseInt(ctx.queryParam("employeeId")),
-                    Integer.parseInt(ctx.queryParam("actorId"))
-            );
+            int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
+            int actorId = Integer.parseInt(ctx.pathParam("actorId"));
             Employee receivedEmployee = useCase.execute(
-                    dto.employeeId(),
-                    dto.actorId()
+                    employeeId,
+                    actorId
             );
             GetEmployeeDTOOut presentationEmployee = mapper.mapToPresentation(
                     receivedEmployee,
@@ -42,10 +39,14 @@ public class EmployeeGetAdapter {
             return ctx.status(201).json(presentationEmployee);
 
         } catch (NotPermittedException e) {
-            return ctx.status(403).json(Map.of("error", e.getMessage()));
+            return ctx.status(403).json(
+                    Map.of(
+                            "error",
+                            "You do not have permission to perform this operation"
+                    )
+            );
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }
