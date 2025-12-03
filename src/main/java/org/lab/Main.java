@@ -111,10 +111,10 @@ public class Main {
         app.get("/", ctx -> ctx.result("Hello World"));
 
         app.post("/employee", createEmployeeAdapter::createEmployee);
-        app.delete("/employee", deleteEmployeeAdapter::deleteEmployee);
-        app.get("/employee", getEmployeeAdapter::getEmployee);
+        app.delete("/employee/{employeeId}/{actorId}", deleteEmployeeAdapter::deleteEmployee);
+        app.get("/employee/{employeeId}/{actorId}", getEmployeeAdapter::getEmployee);
 
-        app.post("/project/{employeeId}", createProjectAdapter::createProject);
+        app.post("/project", createProjectAdapter::createProject);
         app.get("/project/{projectId}/{employeeId}", projectGetAdapter::getProject);
         app.delete("/project/{projectId}/{employeeId}", projectDeleteAdapter::deleteProject);
         app.get("/project/list/{employeeId}", projectListAdapter::listProjects);

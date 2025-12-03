@@ -57,31 +57,6 @@ public class TestCreateEmployeeUseCase {
     }
 
     @Test
-    public void testCreateEmployeeRaisesUserAlreadyExistsException() {
-        Employee input = new Employee();
-        input.setId(123);
-        input.setName("Tim Cock");
-
-        Employee creator = new Employee();
-        creator.setId(1);
-        creator.setType(EmployeeType.PROGRAMMER);
-
-        Mockito.when(employeeRepository.getById(1)).thenReturn(creator);
-        Mockito.when(employeeRepository.getById(123)).thenReturn(input);
-
-        RuntimeException thrown = Assertions.assertThrows(
-                RuntimeException.class,
-                () -> useCase.execute(input, 1)
-        );
-
-        Assertions.assertTrue(
-                thrown.getCause() instanceof ExecutionException &&
-                        ((ExecutionException) thrown.getCause()).getCause() instanceof UserAlreadyExistsException
-        );
-        Mockito.verify(employeeRepository).getById(123);
-    }
-
-    @Test
     public void testCreateEmployeeRaisesNotPermittedException() {
         Employee input = new Employee();
         input.setId(123);

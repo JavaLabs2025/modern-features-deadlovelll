@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lab.application.shared.services.EmployeePermissionValidator;
+import org.lab.application.shared.services.EmployeeProvider;
 import org.lab.core.constants.employee.EmployeeType;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.NotPermittedException;
@@ -14,14 +15,16 @@ import org.mockito.Mockito;
 public class TestGetEmployeeUseCase {
 
     private EmployeeRepository employeeRepository;
+    private EmployeeProvider employeeProvider;
     private EmployeePermissionValidator validator;
     private GetEmployeeUseCase useCase;
 
     @BeforeEach
     public void setUp() {
         employeeRepository = Mockito.mock(EmployeeRepository.class);
+        employeeProvider = new  EmployeeProvider(employeeRepository);
         validator = new EmployeePermissionValidator(employeeRepository);
-        useCase = new GetEmployeeUseCase(employeeRepository, validator);
+        useCase = new GetEmployeeUseCase(validator, employeeProvider);
     }
 
     @Test

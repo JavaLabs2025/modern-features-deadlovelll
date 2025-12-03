@@ -21,12 +21,18 @@ public class EmployeeDeleteAdapter {
             Context ctx
     ) {
         try {
-            DeleteEmployeeDTO dto = ctx.bodyAsClass(DeleteEmployeeDTO.class);
-            this.useCase.execute(dto.deletedEmployeeId(), dto.employeeId());
+            int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
+            int actorId = Integer.parseInt(ctx.pathParam("actorId"));
+            this.useCase.execute(employeeId, actorId);
             return ctx.status(201);
 
         } catch (NotPermittedException e) {
-            return ctx.status(403).json(Map.of("error", e.getMessage()));
+            return ctx.status(403).json(
+                    Map.of(
+                            "error",
+                            "You do not have permission to perform this operation"
+                    )
+            );
 
         } catch (Exception e) {
             return ctx.status(500).json(Map.of("error", "Internal server error"));

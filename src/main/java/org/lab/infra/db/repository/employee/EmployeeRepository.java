@@ -1,6 +1,7 @@
 package org.lab.infra.db.repository.employee;
 
 import org.lab.domain.emploee.model.Employee;
+import org.lab.domain.shared.exceptions.DatabaseException;
 import org.lab.infra.db.client.DatabaseClient;
 import org.lab.core.utils.mapper.ObjectMapper;
 
@@ -40,7 +41,7 @@ public class EmployeeRepository {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException();
         }
         return null;
     }
