@@ -11,6 +11,7 @@ import java.util.List;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.model.Project;
 import org.lab.infra.db.client.DatabaseClient;
+import org.lab.infra.db.spec.Specification;
 import org.lab.infra.db.spec.SqlSpec;
 
 public class ProjectRepository {
@@ -48,14 +49,15 @@ public class ProjectRepository {
     }
 
     public List<Project> list(
-            SqlSpec specification
+            Specification specification
     ) {
-        String sql = "SELECT * FROM projects WHERE" + specification.toSql();
+        SqlSpec spec = (SqlSpec) specification;
+        String sql = "SELECT * FROM projects WHERE" + spec.toSql();
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            List<Object> params = specification.getParams();
+            List<Object> params = spec.getParams();
             for (int i = 0; i < params.size(); i++) {
                 stmt.setObject(i+1, params.get(i));
             }
