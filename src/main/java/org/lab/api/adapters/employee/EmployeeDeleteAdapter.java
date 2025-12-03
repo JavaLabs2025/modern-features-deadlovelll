@@ -1,7 +1,6 @@
 package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
-import org.lab.application.employee.dto.DeleteEmployeeDTO;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 

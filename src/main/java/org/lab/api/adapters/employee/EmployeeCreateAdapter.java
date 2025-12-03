@@ -1,11 +1,12 @@
 package org.lab.api.adapters.employee;
 
 import io.javalin.http.Context;
-import org.lab.core.utils.mapper.ObjectMapper;
+
 import org.lab.application.employee.dto.GetEmployeeDTOOut;
 import org.lab.application.employee.dto.CreateEmployeeDTO;
-import org.lab.domain.emploee.model.Employee;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
+import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.UserAlreadyExistsException;
 
@@ -44,7 +45,12 @@ public class EmployeeCreateAdapter {
             return ctx.status(409).json(Map.of("error", "User already exists"));
 
         } catch (NotPermittedException e) {
-            return ctx.status(403).json(Map.of("error", e.getMessage()));
+            return ctx.status(403).json(
+                    Map.of(
+                            "error",
+                            "You do not have permission to perform this operation"
+                    )
+            );
 
         } catch (Exception e) {
             return ctx.status(500).json(Map.of("error", "Internal server error"));

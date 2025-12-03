@@ -36,6 +36,28 @@ public class TestEmployeeDeleteAdapter {
     }
 
     @Test
+    public void testDeleteEmployeeSuccess() {
+        Employee notManagerEmployee = new Employee();
+        notManagerEmployee.setId(1);
+        notManagerEmployee.setName("Manager");
+        notManagerEmployee.setType(EmployeeType.MANAGER);
+
+        Employee testEmployee = new Employee();
+        testEmployee.setId(2);
+        testEmployee.setName("test");
+        testEmployee.setType(EmployeeType.TESTER);
+
+        Mockito.when(ctx.pathParam("actorId")).thenReturn(String.valueOf(notManagerEmployee.getId()));
+        Mockito.when(ctx.pathParam("employeeId")).thenReturn(String.valueOf(testEmployee.getId()));
+        Mockito.when(employeeRepository.getById(notManagerEmployee.getId())).thenReturn(notManagerEmployee);
+
+        Mockito.when(ctx.status(201)).thenReturn(ctx);
+
+        employeeDeleteAdapter.deleteEmployee(ctx);
+        Mockito.verify(ctx).status(201);
+    }
+
+    @Test
     public void testDeleteEmployeeFetchesNotPermittedException() {
         Employee notManagerEmployee = new Employee();
         notManagerEmployee.setId(1);
