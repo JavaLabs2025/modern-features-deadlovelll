@@ -7,16 +7,16 @@ import org.lab.domain.project.model.Project;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
 import org.lab.infra.db.repository.project.ProjectRepository;
-import org.lab.application.shared.services.CurrentEmployeeProvider;
+import org.lab.application.shared.services.EmployeeProvider;
 
 public class GetValidator {
 
     private final ProjectRepository projectRepository;
-    private final CurrentEmployeeProvider currentEmployeeProvider;
+    private final EmployeeProvider currentEmployeeProvider;
 
     public GetValidator(
             ProjectRepository projectRepository,
-            CurrentEmployeeProvider currentEmployeeProvider
+            EmployeeProvider currentEmployeeProvider
     ) {
         this.projectRepository = projectRepository;
         this.currentEmployeeProvider = currentEmployeeProvider;

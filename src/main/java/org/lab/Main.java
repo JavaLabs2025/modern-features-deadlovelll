@@ -15,7 +15,7 @@ import org.lab.application.project.use_cases.CreateProjectUseCase;
 import org.lab.application.project.use_cases.DeleteProjectUseCase;
 import org.lab.application.project.use_cases.GetProjectUseCase;
 import org.lab.application.project.use_cases.ListProjectUseCase;
-import org.lab.application.shared.services.CurrentEmployeeProvider;
+import org.lab.application.shared.services.EmployeeProvider;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
@@ -52,8 +52,10 @@ public class Main {
         );
         EmployeeGetAdapter getEmployeeAdapter = new EmployeeGetAdapter(
                 new GetEmployeeUseCase(
-                        new EmployeeRepository(),
                         new EmployeePermissionValidator(
+                                new EmployeeRepository()
+                        ),
+                        new EmployeeProvider(
                                 new EmployeeRepository()
                         )
                 ),
@@ -73,7 +75,7 @@ public class Main {
                 new GetProjectUseCase(
                         new GetValidator(
                                 new ProjectRepository(),
-                                new CurrentEmployeeProvider(
+                                new EmployeeProvider(
                                         new EmployeeRepository()
                                 )
                         ),
@@ -87,7 +89,7 @@ public class Main {
                         new ProjectRepository(),
                         new GetValidator(
                                 new ProjectRepository(),
-                                new CurrentEmployeeProvider(
+                                new EmployeeProvider(
                                         new EmployeeRepository()
                                 )
                         ),
@@ -98,7 +100,7 @@ public class Main {
         ProjectListAdapter projectListAdapter = new ProjectListAdapter(
                 new ListProjectUseCase(
                         new ProjectRepository(),
-                        new CurrentEmployeeProvider(
+                        new EmployeeProvider(
                                 new EmployeeRepository()
                         ),
                         new UserSpecFactory()
@@ -112,9 +114,9 @@ public class Main {
         app.delete("/employee", deleteEmployeeAdapter::deleteEmployee);
         app.get("/employee", getEmployeeAdapter::getEmployee);
 
-        app.post("/project", createProjectAdapter::createProject);
-        app.get("/project", projectGetAdapter::getProject);
-        app.delete("/project", projectDeleteAdapter::deleteProject);
-        app.get("/project/{employeeId}", projectListAdapter::listProjects);
+        app.post("/project/{employeeId}", createProjectAdapter::createProject);
+        app.get("/project/{projectId}/{employeeId}", projectGetAdapter::getProject);
+        app.delete("/project/{projectId}/{employeeId}", projectDeleteAdapter::deleteProject);
+        app.get("/project/list/{employeeId}", projectListAdapter::listProjects);
     }
 }

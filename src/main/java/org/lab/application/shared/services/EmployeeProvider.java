@@ -4,10 +4,10 @@ import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 
-public class CurrentEmployeeProvider {
+public class EmployeeProvider {
     private final EmployeeRepository employeeRepository;
 
-    public CurrentEmployeeProvider(
+    public EmployeeProvider(
             EmployeeRepository employeeRepository
     ) {
         this.employeeRepository = employeeRepository;

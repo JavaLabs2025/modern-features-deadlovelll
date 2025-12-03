@@ -3,7 +3,7 @@ package org.lab.application.project.use_cases;
 import java.util.List;
 
 import org.lab.application.project.services.UserSpecFactory;
-import org.lab.application.shared.services.CurrentEmployeeProvider;
+import org.lab.application.shared.services.EmployeeProvider;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
 import org.lab.infra.db.repository.project.ProjectRepository;
@@ -12,12 +12,12 @@ import org.lab.infra.db.spec.Specification;
 public class ListProjectUseCase {
 
     private final ProjectRepository projectRepository;
-    private final CurrentEmployeeProvider currentEmployeeProvider;
+    private final EmployeeProvider currentEmployeeProvider;
     private final UserSpecFactory userSpecFactory;
 
     public ListProjectUseCase(
             ProjectRepository projectRepository,
-            CurrentEmployeeProvider currentEmployeeProvider,
+            EmployeeProvider currentEmployeeProvider,
             UserSpecFactory userSpecFactory
     ) {
         this.projectRepository = projectRepository;
