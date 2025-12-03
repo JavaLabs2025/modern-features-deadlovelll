@@ -13,7 +13,11 @@ public class CurrentEmployeeProvider {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee get(int employeeId) {
+    public Employee get(
+            int employeeId
+    ) throws
+            UserNotFoundException
+    {
         Employee employee = employeeRepository.getById(employeeId);
         if (employee == null) {
             throw new UserNotFoundException();

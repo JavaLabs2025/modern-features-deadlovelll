@@ -5,11 +5,16 @@ import org.lab.api.adapters.employee.EmployeeCreateAdapter;
 import org.lab.api.adapters.employee.EmployeeDeleteAdapter;
 import org.lab.api.adapters.employee.EmployeeGetAdapter;
 import org.lab.api.adapters.project.ProjectCreateAdapter;
+import org.lab.api.adapters.project.ProjectDeleteAdapter;
 import org.lab.api.adapters.project.ProjectGetAdapter;
+import org.lab.api.adapters.project.ProjectListAdapter;
 import org.lab.application.employee.services.CreateValidator;
 import org.lab.application.project.services.GetValidator;
+import org.lab.application.project.services.UserSpecFactory;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
+import org.lab.application.project.use_cases.DeleteProjectUseCase;
 import org.lab.application.project.use_cases.GetProjectUseCase;
+import org.lab.application.project.use_cases.ListProjectUseCase;
 import org.lab.application.shared.services.CurrentEmployeeProvider;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
@@ -77,6 +82,30 @@ public class Main {
                 new ObjectMapper()
         );
 
+        ProjectDeleteAdapter projectDeleteAdapter = new ProjectDeleteAdapter(
+                new DeleteProjectUseCase(
+                        new ProjectRepository(),
+                        new GetValidator(
+                                new ProjectRepository(),
+                                new CurrentEmployeeProvider(
+                                        new EmployeeRepository()
+                                )
+                        ),
+                        new ProjectMembershipValidator()
+                )
+        );
+
+        ProjectListAdapter projectListAdapter = new ProjectListAdapter(
+                new ListProjectUseCase(
+                        new ProjectRepository(),
+                        new CurrentEmployeeProvider(
+                                new EmployeeRepository()
+                        ),
+                        new UserSpecFactory()
+                ),
+                new ObjectMapper()
+        );
+
         app.get("/", ctx -> ctx.result("Hello World"));
 
         app.post("/employee", createEmployeeAdapter::createEmployee);
@@ -85,5 +114,7 @@ public class Main {
 
         app.post("/project", createProjectAdapter::createProject);
         app.get("/project", projectGetAdapter::getProject);
+        app.delete("/project", projectDeleteAdapter::deleteProject);
+        app.get("/project/{employeeId}", projectListAdapter::listProjects);
     }
 }
