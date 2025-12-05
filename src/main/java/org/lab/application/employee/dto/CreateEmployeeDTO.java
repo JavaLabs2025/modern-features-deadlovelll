@@ -6,7 +6,6 @@ import org.lab.domain.interfaces.PresentationObject;
 public record CreateEmployeeDTO(
         String name,
         int age,
-        EmployeeType type,
-        int creatorId
+        EmployeeType type
 ) implements PresentationObject {
 }

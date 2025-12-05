@@ -37,18 +37,21 @@ public class EmployeeRepository {
                         raw.put(columnName, value);
                     }
                     return objectMapper.mapFromRaw(raw, Employee.class);
+                } else {
+                    throw new RuntimeException("Employee creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
             throw new DatabaseException();
-        }
-        return null;
-    }
+        }}
 
-    public Employee create(Employee employee) {
+    public Employee create(
+            Employee employee,
+            int actorId
+    ) {
         String sql = """
-        INSERT INTO employees (name, age, type, created_by, create_date)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO employees (name, age, type, "createdBy")
+        VALUES (?, ?, ?, ?)
         RETURNING *
         """;
 
@@ -59,19 +62,24 @@ public class EmployeeRepository {
             stmt.setString(1, employee.getName());
             stmt.setInt(2, employee.getAge());
             stmt.setString(3, employee.getType().name());
-            stmt.setInt(4, employee.getCreatedBy());
-            stmt.setTimestamp(5, new Timestamp(
-                    employee.getCreatedDate().getTime())
-            );
+            stmt.setInt(4, actorId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return objectMapper.mapFromRaw(rs, Employee.class);
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("id", rs.getInt("id"));
+                    row.put("name", rs.getString("name"));
+                    row.put("age", rs.getInt("age"));
+                    row.put("type", rs.getString("type"));
+                    row.put("createdBy", rs.getInt("createdBy"));
+                    row.put("createdDate", rs.getTimestamp("createdDate"));
+                    return objectMapper.mapFromRaw(row, Employee.class);
+                } else {
+                    throw new RuntimeException("Employee creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException();
         }
-        return employee;
     }
 
     public Object delete(int id) {
@@ -81,6 +89,7 @@ public class EmployeeRepository {
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setInt(1, id);
+            return stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }

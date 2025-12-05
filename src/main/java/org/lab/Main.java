@@ -34,10 +34,7 @@ public class Main {
                 new ObjectMapper(),
                 new CreateEmployeeUseCase(
                         new EmployeeRepository(),
-                        new CreateValidator(
-                                new EmployeePermissionValidator(
-                                        new EmployeeRepository()
-                                ),
+                        new EmployeePermissionValidator(
                                 new EmployeeRepository()
                         )
                 )
@@ -110,7 +107,7 @@ public class Main {
 
         app.get("/", ctx -> ctx.result("Hello World"));
 
-        app.post("/employee", createEmployeeAdapter::createEmployee);
+        app.post("/employee/{actorId}", createEmployeeAdapter::createEmployee);
         app.delete("/employee/{employeeId}/{actorId}", deleteEmployeeAdapter::deleteEmployee);
         app.get("/employee/{employeeId}/{actorId}", getEmployeeAdapter::getEmployee);
 

@@ -33,13 +33,6 @@ public class CreateValidator {
                 validator.validate(creatorId);
                 return null;
             });
-            scope.fork(() -> {
-                Employee employeeCreated = employeeRepository.getById(employee.getId());
-                if (employeeCreated != null) {
-                    throw new UserAlreadyExistsException("Employee already exists");
-                }
-                return null;
-            });
 
             scope.join();
             scope.throwIfFailed();

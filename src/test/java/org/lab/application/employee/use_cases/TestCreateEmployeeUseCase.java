@@ -25,8 +25,7 @@ public class TestCreateEmployeeUseCase {
     public void setUp() {
         employeeRepository = Mockito.mock(EmployeeRepository.class);
         validator = new EmployeePermissionValidator(employeeRepository);
-        createValidator = new CreateValidator(validator, employeeRepository);
-        useCase = new CreateEmployeeUseCase(employeeRepository, createValidator);
+        useCase = new CreateEmployeeUseCase(employeeRepository, validator);
     }
 
     @Test
@@ -40,7 +39,7 @@ public class TestCreateEmployeeUseCase {
         saved.setId(100);
         saved.setName("Tim Cock");
 
-        Mockito.when(employeeRepository.create(input)).thenReturn(saved);
+        Mockito.when(employeeRepository.create(input, 12)).thenReturn(saved);
 
         Employee creator = new Employee();
         creator.setId(1);
@@ -51,7 +50,7 @@ public class TestCreateEmployeeUseCase {
 
         Assertions.assertEquals(100, result.getId());
 
-        Mockito.verify(employeeRepository).create(input);
+        Mockito.verify(employeeRepository).create(input, 12);
         Mockito.verify(employeeRepository).getById(1);
     }
 
