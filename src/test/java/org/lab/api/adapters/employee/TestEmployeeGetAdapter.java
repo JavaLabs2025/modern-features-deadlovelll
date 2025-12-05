@@ -56,10 +56,16 @@ public class TestEmployeeGetAdapter {
         testEmployee.setName("test");
         testEmployee.setType(EmployeeType.TESTER);
 
-        Mockito.when(ctx.pathParam("actorId")).thenReturn(String.valueOf(ManagerEmployee.getId()));
-        Mockito.when(ctx.pathParam("employeeId")).thenReturn(String.valueOf(testEmployee.getId()));
-        Mockito.when(employeeRepository.getById(ManagerEmployee.getId())).thenReturn(ManagerEmployee);
-        Mockito.when(employeeRepository.getById(testEmployee.getId())).thenReturn(testEmployee);
+        Mockito.when(ctx.pathParam("actorId"))
+                .thenReturn(String.valueOf(ManagerEmployee.getId()));
+        Mockito.when(ctx.pathParam("employeeId"))
+                .thenReturn(String.valueOf(testEmployee.getId()));
+        Mockito.when(employeeRepository
+                .getById(ManagerEmployee.getId()))
+                .thenReturn(ManagerEmployee);
+        Mockito.when(employeeRepository
+                .getById(testEmployee.getId()))
+                .thenReturn(testEmployee);
 
         Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
@@ -80,17 +86,28 @@ public class TestEmployeeGetAdapter {
         testEmployee.setName("test");
         testEmployee.setType(EmployeeType.TESTER);
 
-        Mockito.when(ctx.pathParam("actorId")).thenReturn(String.valueOf(ManagerEmployee.getId()));
-        Mockito.when(ctx.pathParam("employeeId")).thenReturn(String.valueOf(testEmployee.getId()));
-        Mockito.when(employeeRepository.getById(ManagerEmployee.getId())).thenReturn(ManagerEmployee);
-        Mockito.when(employeeRepository.getById(testEmployee.getId())).thenReturn(testEmployee);
+        Mockito.when(ctx.pathParam("actorId"))
+                .thenReturn(String.valueOf(ManagerEmployee.getId()));
+        Mockito.when(ctx.pathParam("employeeId"))
+                .thenReturn(String.valueOf(testEmployee.getId()));
+        Mockito.when(employeeRepository
+                .getById(ManagerEmployee.getId()))
+                .thenReturn(ManagerEmployee);
+        Mockito.when(employeeRepository
+                .getById(testEmployee.getId()))
+                .thenReturn(testEmployee);
 
         Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         employeeGetAdapter.getEmployee(ctx);
         Mockito.verify(ctx).status(403);
-        Mockito.verify(ctx).json(Map.of("error", "You do not have permission to perform this operation"));
+        Mockito.verify(ctx).json(
+                Map.of(
+                        "error",
+                        "You do not have permission to perform this operation"
+                )
+        );
     }
 
     @Test
@@ -105,11 +122,17 @@ public class TestEmployeeGetAdapter {
         testEmployee.setName("test");
         testEmployee.setType(EmployeeType.TESTER);
 
-        Mockito.when(ctx.pathParam("actorId")).thenReturn(String.valueOf(notManagerEmployee.getId()));
-        Mockito.when(ctx.pathParam("employeeId")).thenReturn(String.valueOf(testEmployee.getId()));
+        Mockito.when(ctx.pathParam("actorId"))
+                .thenReturn(String.valueOf(notManagerEmployee.getId()));
+        Mockito.when(ctx.pathParam("employeeId"))
+                .thenReturn(String.valueOf(testEmployee.getId()));
 
-        Mockito.doThrow(DatabaseException.class).when(employeeRepository).getById(notManagerEmployee.getId());
-        Mockito.doThrow(DatabaseException.class).when(employeeRepository).getById(notManagerEmployee.getId());
+        Mockito.doThrow(DatabaseException.class)
+                .when(employeeRepository)
+                .getById(notManagerEmployee.getId());
+        Mockito.doThrow(DatabaseException.class)
+                .when(employeeRepository)
+                .getById(notManagerEmployee.getId());
 
         Mockito.when(ctx.status(500)).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
@@ -132,11 +155,18 @@ public class TestEmployeeGetAdapter {
         testEmployee.setName("test");
         testEmployee.setType(EmployeeType.TESTER);
 
-        Mockito.when(ctx.pathParam("actorId")).thenReturn(String.valueOf(ManagerEmployee.getId()));
-        Mockito.when(ctx.pathParam("employeeId")).thenReturn(String.valueOf(testEmployee.getId()));
+        Mockito.when(ctx.pathParam("actorId"))
+                .thenReturn(String.valueOf(ManagerEmployee.getId()));
+        Mockito.when(ctx.pathParam("employeeId"))
+                .thenReturn(String.valueOf(testEmployee.getId()));
 
-        Mockito.when(employeeRepository.getById(ManagerEmployee.getId())).thenReturn(ManagerEmployee);
-        Mockito.doThrow(DatabaseException.class).when(employeeRepository).getById(testEmployee.getId());
+        Mockito.when(employeeRepository
+                .getById(ManagerEmployee.getId()))
+                .thenReturn(ManagerEmployee);
+
+        Mockito.doThrow(DatabaseException.class)
+                .when(employeeRepository)
+                .getById(testEmployee.getId());
 
         Mockito.when(ctx.status(500)).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
