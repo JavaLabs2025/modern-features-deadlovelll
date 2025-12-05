@@ -7,6 +7,9 @@ import org.lab.application.project.dto.GetProjectDTO;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
 import org.lab.domain.project.model.Project;
 import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.domain.shared.exceptions.NotPermittedException;
+
+import java.util.Map;
 
 public class ProjectCreateAdapter {
 
@@ -24,13 +27,25 @@ public class ProjectCreateAdapter {
     public Context createProject(
             Context ctx
     ) {
-        CreateProjectDTO dto = ctx.bodyAsClass(CreateProjectDTO.class);
-        Project project = objectMapper.mapToDomain(dto, Project.class);
-        Project createdProject = useCase.execute(project);
-        GetProjectDTO presentationProject = objectMapper.mapToPresentation(
-                createdProject,
-                GetProjectDTO.class
-        );
-        return ctx.status(201).json(presentationProject);
+        try {
+            CreateProjectDTO dto = ctx.bodyAsClass(CreateProjectDTO.class);
+            Project project = objectMapper.mapToDomain(dto, Project.class);
+            Project createdProject = useCase.execute(project);
+            GetProjectDTO presentationProject = objectMapper.mapToPresentation(
+                    createdProject,
+                    GetProjectDTO.class
+            );
+            return ctx.status(201).json(presentationProject);
+
+        } catch (NotPermittedException e) {
+            return ctx.status(403).json(
+                    Map.of(
+                            "error",
+                            "You do not have permission to perform this operation"
+                    )
+            );
+        } catch (Exception e) {
+            return ctx.status(500).json(Map.of("error", "Internal server error"));
+        }
     }
 }
