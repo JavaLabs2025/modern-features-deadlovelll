@@ -1,13 +1,11 @@
 package org.lab.infra.db.repository.project;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.model.Project;
 import org.lab.infra.db.client.DatabaseClient;
@@ -45,7 +43,47 @@ public class ProjectRepository {
     }
 
     public Project create(Project project) {
-        return new Project();
+        String sql = """
+            INSERT INTO projects (
+                name,
+                description,
+                managerId,
+                teamLeadId,
+                developerIds,
+                testerIds,
+                createdBy
+            )
+            VALUES (?, ?, ?, ?, ?::jsonb, ?::jsonb, ?)
+            RETURNING *
+        """;
+
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setString(1, project.getName());
+            stmt.setString(2, project.getDescription());
+            stmt.setInt(3, project.getManagerId());
+
+            if (project.getTeamLeadId() != null)
+                stmt.setInt(4, project.getTeamLeadId());
+            else
+                stmt.setNull(4, Types.INTEGER);
+
+            stmt.setString(5, toJson(project.getDeveloperIds()));
+            stmt.setString(6, toJson(project.getTesterIds()));
+
+            stmt.setInt(7, project.getCreatedBy());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return objectMapper.mapFromRaw(rs, Project.class);
+                }
+            }
+        } catch (SQLException | JsonProcessingException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public List<Project> list(
@@ -83,5 +121,12 @@ public class ProjectRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private String toJson(List<Integer> list)
+            throws
+            JsonProcessingException
+    {
+        return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(list);
     }
 }

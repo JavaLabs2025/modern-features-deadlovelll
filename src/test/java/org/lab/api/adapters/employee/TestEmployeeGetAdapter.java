@@ -94,7 +94,7 @@ public class TestEmployeeGetAdapter {
     }
 
     @Test
-    public void testDeleteEmployeeFetchesUnexpectedExceptionWhenFetchingActor() {
+    public void testGetEmployeeFetchesUnexpectedExceptionWhenFetchingActor() {
         Employee notManagerEmployee = new Employee();
         notManagerEmployee.setId(1);
         notManagerEmployee.setName("NotManager");
@@ -121,7 +121,7 @@ public class TestEmployeeGetAdapter {
     }
 
     @Test
-    public void testDeleteEmployeeFetchesUnexpectedExceptionWhenFetchingEmployee() {
+    public void testGetEmployeeFetchesUnexpectedExceptionWhenFetchingEmployee() {
         Employee ManagerEmployee = new Employee();
         ManagerEmployee.setId(1);
         ManagerEmployee.setName("NotManager");
