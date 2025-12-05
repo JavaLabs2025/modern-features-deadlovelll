@@ -18,10 +18,11 @@ public class CreateProjectUseCase {
     }
 
     public Project execute(
-            Project project
+            Project project,
+            int employeeId
     ) {
-        this.employeePermissionValidator.validate(project.getManagerId());
-        Project domainProject = this.projectRepository.create(project);
+        this.employeePermissionValidator.validate(employeeId);
+        Project domainProject = this.projectRepository.create(project, employeeId);
         return domainProject;
     }
 }

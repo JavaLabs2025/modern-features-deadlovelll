@@ -1,25 +1,26 @@
 package org.lab.infra.db.repository.project;
 
 import java.sql.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.model.Project;
+import org.lab.domain.shared.exceptions.DatabaseException;
 import org.lab.infra.db.client.DatabaseClient;
 import org.lab.infra.db.spec.Specification;
 import org.lab.infra.db.spec.SqlSpec;
+import org.lab.infra.db.repository.project.data_extractor.ProjectRawDataExtractor;
 
 public class ProjectRepository {
 
     private final DatabaseClient databaseClient;
     private final ObjectMapper objectMapper;
+    private final ProjectRawDataExtractor projectRawDataExtractor;
 
     public ProjectRepository() {
         databaseClient = new DatabaseClient();
         objectMapper = new ObjectMapper();
+        projectRawDataExtractor = new ProjectRawDataExtractor();
     }
 
     public Project get(
@@ -42,18 +43,21 @@ public class ProjectRepository {
         return null;
     }
 
-    public Project create(Project project) {
+    public Project create(
+            Project project,
+            int employeeId
+    ) {
         String sql = """
             INSERT INTO projects (
                 name,
                 description,
-                managerId,
-                teamLeadId,
-                developerIds,
-                testerIds,
-                createdBy
+                "managerId",
+                "teamLeadId",
+                "developerIds",
+                "testerIds",
+                "createdBy"
             )
-            VALUES (?, ?, ?, ?, ?::jsonb, ?::jsonb, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             RETURNING *
         """;
 
@@ -63,24 +67,28 @@ public class ProjectRepository {
         ) {
             stmt.setString(1, project.getName());
             stmt.setString(2, project.getDescription());
-            stmt.setInt(3, project.getManagerId());
+            stmt.setInt(3, employeeId);
+            stmt.setInt(4, project.getTeamLeadId());
+            Array developerArray = conn.createArrayOf(
+                    "INTEGER",
+                    project.getDeveloperIds().toArray()
+            );
+            stmt.setArray(5, developerArray);
 
-            if (project.getTeamLeadId() != null)
-                stmt.setInt(4, project.getTeamLeadId());
-            else
-                stmt.setNull(4, Types.INTEGER);
-
-            stmt.setString(5, toJson(project.getDeveloperIds()));
-            stmt.setString(6, toJson(project.getTesterIds()));
-
+            Array testerArray = conn.createArrayOf(
+                    "INTEGER",
+                    project.getTesterIds().toArray()
+            );
+            stmt.setArray(6, testerArray);
             stmt.setInt(7, project.getCreatedBy());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return objectMapper.mapFromRaw(rs, Project.class);
+                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                    return objectMapper.mapFromRaw(row, Project.class);
                 }
             }
-        } catch (SQLException | JsonProcessingException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return null;
@@ -102,7 +110,8 @@ public class ProjectRepository {
             try (ResultSet rs = stmt.executeQuery()) {
                 List<Project> projects = new ArrayList<>();
                 while (rs.next()) {
-                    projects.add(objectMapper.mapFromRaw(rs, Project.class));
+                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                    projects.add(objectMapper.mapFromRaw(row, Project.class));
                 }
                 return projects;
             }
@@ -111,22 +120,16 @@ public class ProjectRepository {
         }
     }
 
-    public void delete(int projectId) {
+    public int delete(int projectId) {
         String sql = "DELETE FROM projects WHERE id = ?";
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setInt(1, projectId);
+            return stmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException();
         }
-    }
-
-    private String toJson(List<Integer> list)
-            throws
-            JsonProcessingException
-    {
-        return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(list);
     }
 }

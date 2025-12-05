@@ -28,9 +28,10 @@ public class ProjectCreateAdapter {
             Context ctx
     ) {
         try {
+            int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
             CreateProjectDTO dto = ctx.bodyAsClass(CreateProjectDTO.class);
             Project project = objectMapper.mapToDomain(dto, Project.class);
-            Project createdProject = useCase.execute(project);
+            Project createdProject = useCase.execute(project, employeeId);
             GetProjectDTO presentationProject = objectMapper.mapToPresentation(
                     createdProject,
                     GetProjectDTO.class
@@ -45,6 +46,7 @@ public class ProjectCreateAdapter {
                     )
             );
         } catch (Exception e) {
+            System.err.println("ERROR " + e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }
