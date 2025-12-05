@@ -36,7 +36,6 @@ public class EmployeeRepository {
                         Object value = rs.getObject(i);
                         raw.put(columnName, value);
                     }
-                    System.out.println("value = " + raw);
                     return objectMapper.mapFromRaw(raw, Employee.class);
                 }
             }
@@ -66,7 +65,7 @@ public class EmployeeRepository {
             );
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    System.out.println("mapping should be here");
+                    return objectMapper.mapFromRaw(rs, Employee.class);
                 }
             }
         } catch (SQLException e) {
