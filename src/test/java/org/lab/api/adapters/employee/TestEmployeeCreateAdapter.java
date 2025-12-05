@@ -97,7 +97,9 @@ public class TestEmployeeCreateAdapter {
                 .thenReturn(new Employee());
 
         Mockito.when(useCase.execute(Mockito.any(), Mockito.eq(dto.creatorId())))
-                .thenThrow(new NotPermittedException("You do not have permission to perform this operation"));
+                .thenThrow(new NotPermittedException(
+                        "You do not have permission to perform this operation"
+                ));
 
         Mockito.when(ctx.status(403)).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);

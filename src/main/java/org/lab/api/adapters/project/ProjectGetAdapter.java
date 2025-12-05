@@ -37,7 +37,7 @@ public class ProjectGetAdapter {
                     project,
                     GetProjectDTO.class
             );
-            return ctx.status(201).json(presentationProject);
+            return ctx.status(200).json(presentationProject);
 
         } catch (UserNotFoundException e) {
             return ctx.status(409).json(Map.of("error", "User doesnt exist"));
@@ -51,7 +51,7 @@ public class ProjectGetAdapter {
             );
 
         } catch (ProjectNotFoundException e) {
-            return ctx.status(404).json(Map.of("error", "Project doesn't exist"));
+            return ctx.status(404).json(Map.of("error", "Project doesnt exist"));
 
         } catch (Exception e) {
             return ctx.status(500).json(Map.of("error", "Internal server error"));

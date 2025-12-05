@@ -136,7 +136,10 @@ public class TestProjectCreateAdapter {
 
         Mockito.verify(ctx).status(403);
         Mockito.verify(ctx).json(
-                Map.of("error", "You do not have permission to perform this operation")
+                Map.of(
+                        "error",
+                        "You do not have permission to perform this operation"
+                )
         );
     }
 

@@ -26,7 +26,7 @@ public class ProjectDeleteAdapter {
             int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
             int projectId = Integer.parseInt(ctx.pathParam("projectId"));
             this.useCase.execute(employeeId, projectId);
-            return ctx.status(201);
+            return ctx.status(204);
 
         } catch (UserNotFoundException e) {
             return ctx.status(409).json(Map.of("error", "User doesnt exist"));

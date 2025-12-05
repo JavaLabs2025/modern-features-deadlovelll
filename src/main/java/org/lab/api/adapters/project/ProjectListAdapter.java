@@ -39,7 +39,7 @@ public class ProjectListAdapter {
                 );
                 presentationProjects.add(presentationProject);
             }
-            return ctx.status(201).json(presentationProjects);
+            return ctx.status(200).json(presentationProjects);
         } catch (UserNotFoundException e) {
             return ctx.status(409).json(Map.of("error", "User doesnt exist"));
         }
