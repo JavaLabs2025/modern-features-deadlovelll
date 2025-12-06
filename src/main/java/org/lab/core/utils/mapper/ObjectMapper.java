@@ -3,7 +3,6 @@ package org.lab.core.utils.mapper;
 import org.lab.domain.interfaces.DomainObject;
 import org.lab.domain.interfaces.PresentationObject;
 
-
 public class ObjectMapper {
 
     private final com.fasterxml.jackson.databind.ObjectMapper mapper =

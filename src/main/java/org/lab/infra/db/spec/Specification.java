@@ -1,4 +1,10 @@
 package org.lab.infra.db.spec;
 
-public sealed interface Specification permits SqlSpec {
+import java.util.List;
+
+public sealed interface Specification
+        permits SqlSpec
+{
+    String toSql();
+    List<Object> getParams();
 }
