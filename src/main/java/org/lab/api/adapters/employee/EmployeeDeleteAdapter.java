@@ -1,10 +1,10 @@
 package org.lab.api.adapters.employee;
 
+import java.util.Map;
+
 import io.javalin.http.Context;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
-
-import java.util.Map;
 
 public class EmployeeDeleteAdapter {
 

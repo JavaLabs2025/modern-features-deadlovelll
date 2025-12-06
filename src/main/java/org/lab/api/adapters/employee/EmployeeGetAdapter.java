@@ -1,13 +1,14 @@
 package org.lab.api.adapters.employee;
 
+import java.util.Map;
+
 import io.javalin.http.Context;
+
 import org.lab.application.employee.dto.GetEmployeeDTO;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.NotPermittedException;
-
-import java.util.Map;
 
 public class EmployeeGetAdapter {
 
