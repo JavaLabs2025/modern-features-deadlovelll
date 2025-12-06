@@ -8,6 +8,7 @@ import org.lab.infra.db.repository.employee.spec.ManagerSpec;
 import org.lab.infra.db.spec.Specification;
 
 public class UserSpecFactory {
+
     public Specification getForType(
             Employee employee
     ) {

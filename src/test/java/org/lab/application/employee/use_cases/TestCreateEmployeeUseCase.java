@@ -18,7 +18,6 @@ public class TestCreateEmployeeUseCase {
 
     private EmployeeRepository employeeRepository;
     private EmployeePermissionValidator validator;
-    private CreateValidator createValidator;
     private CreateEmployeeUseCase useCase;
 
     @BeforeEach

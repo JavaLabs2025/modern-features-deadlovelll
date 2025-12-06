@@ -2,23 +2,23 @@ package org.lab.application.project.services;
 
 import java.util.concurrent.*;
 
+import org.lab.application.shared.services.ProjectProvider;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
-import org.lab.infra.db.repository.project.ProjectRepository;
 import org.lab.application.shared.services.EmployeeProvider;
 
 public class GetValidator {
 
-    private final ProjectRepository projectRepository;
+    private final ProjectProvider projectProvider;
     private final EmployeeProvider currentEmployeeProvider;
 
     public GetValidator(
-            ProjectRepository projectRepository,
+            ProjectProvider projectProvider,
             EmployeeProvider currentEmployeeProvider
     ) {
-        this.projectRepository = projectRepository;
+        this.projectProvider = projectProvider;
         this.currentEmployeeProvider = currentEmployeeProvider;
     }
 
@@ -31,10 +31,7 @@ public class GetValidator {
     {
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()){
             var projectFuture = scope.fork(() -> {
-                Project project = this.projectRepository.get(projectId);
-                if (project == null) {
-                    throw new ProjectNotFoundException();
-                }
+                Project project = this.projectProvider.get(projectId);
                 return project;
             });
             var employeeFuture = scope.fork(() -> {

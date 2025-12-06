@@ -8,6 +8,7 @@ import org.lab.api.adapters.project.ProjectCreateAdapter;
 import org.lab.api.adapters.project.ProjectDeleteAdapter;
 import org.lab.api.adapters.project.ProjectGetAdapter;
 import org.lab.api.adapters.project.ProjectListAdapter;
+import org.lab.api.adapters.ticket.TicketCreateAdapter;
 import org.lab.application.project.services.GetValidator;
 import org.lab.application.project.services.UserSpecFactory;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
@@ -19,10 +20,15 @@ import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.application.employee.use_cases.GetEmployeeUseCase;
+import org.lab.application.shared.services.ProjectProvider;
+import org.lab.application.ticket.services.TicketCreateValidator;
+import org.lab.application.ticket.services.TicketPermissionValidator;
+import org.lab.application.ticket.use_cases.CreateTicketUseCase;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.services.ProjectMembershipValidator;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.infra.db.repository.project.ProjectRepository;
+import org.lab.infra.db.repository.ticket.TicketRepository;
 
 public class Main {
 
@@ -70,7 +76,9 @@ public class Main {
         ProjectGetAdapter projectGetAdapter = new ProjectGetAdapter(
                 new GetProjectUseCase(
                         new GetValidator(
-                                new ProjectRepository(),
+                                new ProjectProvider(
+                                        new ProjectRepository()
+                                ),
                                 new EmployeeProvider(
                                         new EmployeeRepository()
                                 )
@@ -84,7 +92,9 @@ public class Main {
                 new DeleteProjectUseCase(
                         new ProjectRepository(),
                         new GetValidator(
-                                new ProjectRepository(),
+                                new ProjectProvider(
+                                        new ProjectRepository()
+                                ),
                                 new EmployeeProvider(
                                         new EmployeeRepository()
                                 )
@@ -104,6 +114,21 @@ public class Main {
                 new ObjectMapper()
         );
 
+        TicketCreateAdapter ticketCreateAdapter = new TicketCreateAdapter(
+                new CreateTicketUseCase(
+                        new TicketRepository(),
+                        new TicketCreateValidator(
+                                new TicketPermissionValidator(
+                                        new EmployeeRepository()
+                                ),
+                                new ProjectProvider(
+                                        new ProjectRepository()
+                                )
+                        )
+                ),
+                new ObjectMapper()
+        );
+
         app.get("/", ctx -> ctx.result("Hello World"));
 
         app.post("/employee/{actorId}", createEmployeeAdapter::createEmployee);
@@ -114,5 +139,7 @@ public class Main {
         app.post("/project/{employeeId}", createProjectAdapter::createProject);
         app.get("/project/{projectId}/{employeeId}", projectGetAdapter::getProject);
         app.delete("/project/{projectId}/{employeeId}", projectDeleteAdapter::deleteProject);
+
+        app.post("/ticket/{employeeId}/{projectId}",  ticketCreateAdapter::createTicket);
     }
 }
