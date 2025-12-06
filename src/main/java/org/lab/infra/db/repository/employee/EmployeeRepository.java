@@ -4,19 +4,21 @@ import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.DatabaseException;
 import org.lab.infra.db.client.DatabaseClient;
 import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.infra.db.repository.employee.data_extractor.EmployeeRawDataExtractor;
 
 import java.sql.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class EmployeeRepository {
     
     private final DatabaseClient databaseClient;
     private final ObjectMapper objectMapper;
+    private final EmployeeRawDataExtractor employeeRawDataExtractor;
 
     public EmployeeRepository() {
         databaseClient = new DatabaseClient();
         objectMapper = new ObjectMapper();
+        employeeRawDataExtractor = new EmployeeRawDataExtractor();
     }
 
     public Employee getById(int id) {
@@ -28,15 +30,8 @@ public class EmployeeRepository {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    ResultSetMetaData metaData = rs.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-                    Map<String, Object> raw = new HashMap<>();
-                    for (int i = 1; i <= columnCount; i++) {
-                        String columnName = metaData.getColumnLabel(i);
-                        Object value = rs.getObject(i);
-                        raw.put(columnName, value);
-                    }
-                    return objectMapper.mapFromRaw(raw, Employee.class);
+                    Map<String, Object> row = employeeRawDataExtractor.extractEmployeeRawData(rs);
+                    return objectMapper.mapFromRaw(row, Employee.class);
                 } else {
                     throw new RuntimeException("Employee creation failed: no row returned");
                 }
@@ -65,13 +60,7 @@ public class EmployeeRepository {
             stmt.setInt(4, actorId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Map<String, Object> row = new HashMap<>();
-                    row.put("id", rs.getInt("id"));
-                    row.put("name", rs.getString("name"));
-                    row.put("age", rs.getInt("age"));
-                    row.put("type", rs.getString("type"));
-                    row.put("createdBy", rs.getInt("createdBy"));
-                    row.put("createdDate", rs.getTimestamp("createdDate"));
+                    Map<String, Object> row = employeeRawDataExtractor.extractEmployeeRawData(rs);
                     return objectMapper.mapFromRaw(row, Employee.class);
                 } else {
                     throw new RuntimeException("Employee creation failed: no row returned");

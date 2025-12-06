@@ -34,13 +34,15 @@ public class ProjectRepository {
             stmt.setInt(1, projectId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return objectMapper.mapFromRaw(rs, Project.class);
+                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                    return objectMapper.mapFromRaw(row, Project.class);
+                } else {
+                    throw new RuntimeException("Employee creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException();
         }
-        return null;
     }
 
     public Project create(
@@ -86,12 +88,13 @@ public class ProjectRepository {
                 if (rs.next()) {
                     Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
                     return objectMapper.mapFromRaw(row, Project.class);
+                } else {
+                    throw new RuntimeException("Employee creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new DatabaseException();
         }
-        return null;
     }
 
     public List<Project> list(
@@ -109,9 +112,13 @@ public class ProjectRepository {
             }
             try (ResultSet rs = stmt.executeQuery()) {
                 List<Project> projects = new ArrayList<>();
-                while (rs.next()) {
-                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
-                    projects.add(objectMapper.mapFromRaw(row, Project.class));
+                if (rs.next()) {
+                    while (rs.next()) {
+                        Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                        projects.add(objectMapper.mapFromRaw(row, Project.class));
+                    }
+                } else {
+                    throw new RuntimeException("Employee creation failed: no row returned");
                 }
                 return projects;
             }

@@ -23,6 +23,7 @@ public class ProjectDeleteAdapter {
             Context ctx
     ) {
         try {
+            System.out.println("hello from deleting project");
             int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
             int projectId = Integer.parseInt(ctx.pathParam("projectId"));
             this.useCase.execute(employeeId, projectId);

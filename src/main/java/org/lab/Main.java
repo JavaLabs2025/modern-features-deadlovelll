@@ -8,7 +8,6 @@ import org.lab.api.adapters.project.ProjectCreateAdapter;
 import org.lab.api.adapters.project.ProjectDeleteAdapter;
 import org.lab.api.adapters.project.ProjectGetAdapter;
 import org.lab.api.adapters.project.ProjectListAdapter;
-import org.lab.application.employee.services.CreateValidator;
 import org.lab.application.project.services.GetValidator;
 import org.lab.application.project.services.UserSpecFactory;
 import org.lab.application.project.use_cases.CreateProjectUseCase;
