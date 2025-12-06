@@ -32,6 +32,7 @@ public class AppModule extends AbstractModule {
         bind(UserSpecFactory.class).asEagerSingleton();
         bind(TicketPermissionValidator.class).asEagerSingleton();
         bind(TicketCreateValidator.class).asEagerSingleton();
+        bind(TicketCloseValidator.class).asEagerSingleton();
 
         bind(CreateEmployeeUseCase.class).asEagerSingleton();
         bind(DeleteEmployeeUseCase.class).asEagerSingleton();
@@ -41,6 +42,7 @@ public class AppModule extends AbstractModule {
         bind(DeleteProjectUseCase.class).asEagerSingleton();
         bind(ListProjectUseCase.class).asEagerSingleton();
         bind(CreateTicketUseCase.class).asEagerSingleton();
+        bind(CloseTicketUseCase.class).asEagerSingleton();
 
         bind(EmployeeCreateAdapter.class).asEagerSingleton();
         bind(EmployeeDeleteAdapter.class).asEagerSingleton();
@@ -50,5 +52,6 @@ public class AppModule extends AbstractModule {
         bind(ProjectDeleteAdapter.class).asEagerSingleton();
         bind(ProjectListAdapter.class).asEagerSingleton();
         bind(TicketCreateAdapter.class).asEagerSingleton();
+        bind(TicketCloseAdapter.class).asEagerSingleton();
     }
 }

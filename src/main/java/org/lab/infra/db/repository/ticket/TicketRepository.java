@@ -1,16 +1,16 @@
 package org.lab.infra.db.repository.ticket;
 
-import org.lab.core.utils.mapper.ObjectMapper;
-import org.lab.domain.shared.exceptions.DatabaseException;
-import org.lab.domain.ticket.model.Ticket;
-import org.lab.infra.db.client.DatabaseClient;
-import org.lab.infra.db.repository.ticket.data_extractor.TicketRawDataExtractor;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+
+import org.lab.core.utils.mapper.ObjectMapper;
+import org.lab.domain.shared.exceptions.DatabaseException;
+import org.lab.domain.ticket.model.Ticket;
+import org.lab.infra.db.client.DatabaseClient;
+import org.lab.infra.db.repository.ticket.data_extractor.TicketRawDataExtractor;
 
 public class TicketRepository {
 
@@ -25,14 +25,16 @@ public class TicketRepository {
     }
 
     public Ticket get(
-            int ticketId
+            int ticketId,
+            int employeeId
     ) {
-        String sql = "SELECT * FROM tickets where id = ?";
+        String sql = "SELECT * FROM tickets WHERE id = ? AND \"assignedTo\" = ?";
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
             stmt.setInt(1, ticketId);
+            stmt.setInt(2, employeeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Map<String, Object> row = ticketRawDataExtractor.extractTicketRawData(rs);
@@ -71,6 +73,30 @@ public class TicketRepository {
                     return objectMapper.mapFromRaw(row, Ticket.class);
                 } else {
                     throw new RuntimeException("Ticket creation failed: no row returned");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+    }
+
+    public Ticket close(
+            int ticketId
+    ) {
+        String sql = """
+        UPDATE tickets SET status = 'CLOSED' WHERE id = ?";
+        """;
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, ticketId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Map<String, Object> row = ticketRawDataExtractor.extractTicketRawData(rs);
+                    return objectMapper.mapFromRaw(row, Ticket.class);
+                } else {
+                    throw new RuntimeException("Ticket update failed: no row returned");
                 }
             }
         } catch (SQLException e) {
