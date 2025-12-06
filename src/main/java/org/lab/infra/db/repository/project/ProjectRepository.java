@@ -1,7 +1,14 @@
 package org.lab.infra.db.repository.project;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Array;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.project.model.Project;
@@ -37,7 +44,7 @@ public class ProjectRepository {
                     Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
                     return objectMapper.mapFromRaw(row, Project.class);
                 } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                    return null;
                 }
             }
         } catch (SQLException e) {
@@ -89,7 +96,7 @@ public class ProjectRepository {
                     Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
                     return objectMapper.mapFromRaw(row, Project.class);
                 } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                    throw new RuntimeException("Project creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
@@ -101,7 +108,7 @@ public class ProjectRepository {
             Specification specification
     ) {
         SqlSpec spec = (SqlSpec) specification;
-        String sql = "SELECT * FROM projects WHERE" + spec.toSql();
+        String sql = "SELECT * FROM projects WHERE " + spec.toSql();
         try (
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
@@ -112,18 +119,14 @@ public class ProjectRepository {
             }
             try (ResultSet rs = stmt.executeQuery()) {
                 List<Project> projects = new ArrayList<>();
-                if (rs.next()) {
-                    while (rs.next()) {
-                        Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
-                        projects.add(objectMapper.mapFromRaw(row, Project.class));
-                    }
-                } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                while (rs.next()) {
+                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                    projects.add(objectMapper.mapFromRaw(row, Project.class));
                 }
                 return projects;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException();
         }
     }
 

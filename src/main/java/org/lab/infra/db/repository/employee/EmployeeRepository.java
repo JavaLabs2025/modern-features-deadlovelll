@@ -1,13 +1,13 @@
 package org.lab.infra.db.repository.employee;
 
+import java.sql.*;
+import java.util.Map;
+
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.DatabaseException;
 import org.lab.infra.db.client.DatabaseClient;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.infra.db.repository.employee.data_extractor.EmployeeRawDataExtractor;
-
-import java.sql.*;
-import java.util.Map;
 
 public class EmployeeRepository {
     
@@ -33,7 +33,7 @@ public class EmployeeRepository {
                     Map<String, Object> row = employeeRawDataExtractor.extractEmployeeRawData(rs);
                     return objectMapper.mapFromRaw(row, Employee.class);
                 } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                    return null;
                 }
             }
         } catch (SQLException e) {

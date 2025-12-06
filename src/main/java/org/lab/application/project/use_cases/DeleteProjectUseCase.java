@@ -27,11 +27,9 @@ public class DeleteProjectUseCase {
             int employeeId,
             int projectId
     ) {
-        System.out.println("Getting pair " + projectId);
         Pair pair = this.getValidator.validate(projectId, employeeId);
         Employee employee = pair.employee();
         Project project = pair.project();
-        System.out.println("Got pair " + projectId);
         this.projectMembershipValidator.validate(employee, project);
         this.projectRepository.delete(projectId);
     }

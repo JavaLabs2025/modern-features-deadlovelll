@@ -30,8 +30,8 @@ public class ProjectGetAdapter {
             int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
             int projectId = Integer.parseInt(ctx.pathParam("projectId"));
             Project project = useCase.execute(
-                    employeeId,
-                    projectId
+                    projectId,
+                    employeeId
             );
             GetProjectDTO presentationProject = mapper.mapToPresentation(
                     project,

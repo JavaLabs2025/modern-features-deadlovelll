@@ -15,7 +15,7 @@ public class ManagerSpec implements SqlSpec {
 
     @Override
     public String toSql() {
-        return "managerId = ?";
+        return "\"managerId\" = ?";
     }
 
     @Override

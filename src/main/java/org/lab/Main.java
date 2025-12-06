@@ -110,9 +110,9 @@ public class Main {
         app.delete("/employee/{employeeId}/{actorId}", deleteEmployeeAdapter::deleteEmployee);
         app.get("/employee/{employeeId}/{actorId}", getEmployeeAdapter::getEmployee);
 
+        app.get("/project/list/{employeeId}", projectListAdapter::listProjects);
         app.post("/project/{employeeId}", createProjectAdapter::createProject);
         app.get("/project/{projectId}/{employeeId}", projectGetAdapter::getProject);
         app.delete("/project/{projectId}/{employeeId}", projectDeleteAdapter::deleteProject);
-        app.get("/project/list/{employeeId}", projectListAdapter::listProjects);
     }
 }
