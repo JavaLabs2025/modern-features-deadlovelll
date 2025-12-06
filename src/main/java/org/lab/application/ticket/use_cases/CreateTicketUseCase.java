@@ -1,6 +1,7 @@
 package org.lab.application.ticket.use_cases;
 
 import com.google.inject.Inject;
+
 import org.lab.domain.ticket.model.Ticket;
 import org.lab.infra.db.repository.ticket.TicketRepository;
 import org.lab.application.ticket.services.TicketCreateValidator;

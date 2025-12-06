@@ -52,7 +52,6 @@ public class EmployeeCreateAdapter {
             );
 
         } catch (Exception e) {
-            System.err.println("ERROR" + e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }

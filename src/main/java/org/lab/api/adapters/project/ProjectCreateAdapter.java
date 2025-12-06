@@ -1,5 +1,7 @@
 package org.lab.api.adapters.project;
 
+import java.util.Map;
+
 import com.google.inject.Inject;
 import io.javalin.http.Context;
 
@@ -9,8 +11,6 @@ import org.lab.application.project.use_cases.CreateProjectUseCase;
 import org.lab.domain.project.model.Project;
 import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.shared.exceptions.NotPermittedException;
-
-import java.util.Map;
 
 public class ProjectCreateAdapter {
 
@@ -48,7 +48,6 @@ public class ProjectCreateAdapter {
                     )
             );
         } catch (Exception e) {
-            System.err.println("ERROR " + e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }

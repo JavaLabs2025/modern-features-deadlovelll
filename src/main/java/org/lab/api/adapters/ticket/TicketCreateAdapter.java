@@ -58,7 +58,6 @@ public class TicketCreateAdapter {
             return ctx.status(404).json(Map.of("error", "Project doesnt exist"));
 
         } catch (Exception e) {
-            System.err.println("ERROR " + e.getMessage());
             return ctx.status(500).json(Map.of("error", "Internal server error"));
         }
     }

@@ -1,5 +1,7 @@
 package org.lab.api.adapters.error_message;
 
+import java.util.Map;
+
 import com.google.inject.Inject;
 import io.javalin.http.Context;
 
@@ -11,8 +13,6 @@ import org.lab.domain.error_mesage.model.ErrorMessage;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
-
-import java.util.Map;
 
 public class ErrorMessageCreateAdapter {
 

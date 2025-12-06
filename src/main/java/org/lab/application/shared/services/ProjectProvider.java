@@ -1,6 +1,7 @@
 package org.lab.application.shared.services;
 
 import com.google.inject.Inject;
+
 import org.lab.domain.project.model.Project;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.infra.db.repository.project.ProjectRepository;

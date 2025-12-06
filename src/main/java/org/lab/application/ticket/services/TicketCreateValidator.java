@@ -1,10 +1,11 @@
 package org.lab.application.ticket.services;
 
-import com.google.inject.Inject;
-import org.lab.application.shared.services.ProjectProvider;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
+
+import com.google.inject.Inject;
+
+import org.lab.application.shared.services.ProjectProvider;
 
 public class TicketCreateValidator {
 

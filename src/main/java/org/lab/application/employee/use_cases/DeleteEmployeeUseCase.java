@@ -1,6 +1,7 @@
 package org.lab.application.employee.use_cases;
 
 import com.google.inject.Inject;
+
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 

@@ -1,8 +1,10 @@
 package org.lab.application.project.services;
 
-import java.util.concurrent.*;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.ExecutionException;
 
 import com.google.inject.Inject;
+
 import org.lab.application.shared.services.ProjectProvider;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
