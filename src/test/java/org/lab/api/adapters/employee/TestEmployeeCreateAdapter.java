@@ -33,6 +33,8 @@ public class TestEmployeeCreateAdapter {
 
     @Test
     public void testCreateEmployeeSuccess() {
+        Mockito.when(ctx.pathParam("actorId")).thenReturn("99");
+
         CreateEmployeeDTO dto = new CreateEmployeeDTO(
                 "John",
                 30,
@@ -61,20 +63,23 @@ public class TestEmployeeCreateAdapter {
                 createdEmployee.getCreatedDate()
         );
 
-        Mockito.when(ctx.bodyAsClass(CreateEmployeeDTO.class))
-                .thenReturn(dto);
+        Mockito.when(
+                ctx.bodyAsClass(CreateEmployeeDTO.class)
+        ).thenReturn(dto);
+        Mockito.when(
+                mapper.mapToDomain(dto, Employee.class)
+        ).thenReturn(mappedEmployee);
+        Mockito.when(
+                useCase.execute(mappedEmployee, 99)
+        ).thenReturn(createdEmployee);
+        Mockito.when(
+                mapper.mapToPresentation(
+                        createdEmployee,
+                        GetEmployeeDTO.class)
+        ).thenReturn(presentation);
 
-        Mockito.when(mapper.mapToDomain(dto, Employee.class))
-                .thenReturn(mappedEmployee);
-
-        Mockito.when(useCase.execute(mappedEmployee, 99))
-                .thenReturn(createdEmployee);
-
-        Mockito.when(mapper.mapToPresentation(createdEmployee, GetEmployeeDTO.class))
-                .thenReturn(presentation);
-
-        Mockito.when(ctx.status(201)).thenReturn(ctx);
-        Mockito.when(ctx.json(presentation)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
+        Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.createEmployee(ctx);
 
@@ -84,6 +89,8 @@ public class TestEmployeeCreateAdapter {
 
     @Test
     public void testCreateEmployeeNotPermitted() {
+        Mockito.when(ctx.pathParam("actorId")).thenReturn("99");
+
         CreateEmployeeDTO dto = new CreateEmployeeDTO(
                 "John",
                 30,
@@ -91,15 +98,14 @@ public class TestEmployeeCreateAdapter {
         );
 
         Mockito.when(ctx.bodyAsClass(CreateEmployeeDTO.class)).thenReturn(dto);
-        Mockito.when(mapper.mapToDomain(dto, Employee.class))
-                .thenReturn(new Employee());
+        Mockito.when(mapper.mapToDomain(dto, Employee.class)).thenReturn(new Employee());
 
         Mockito.when(useCase.execute(Mockito.any(), Mockito.eq(99)))
                 .thenThrow(new NotPermittedException(
                         "You do not have permission to perform this operation"
                 ));
 
-        Mockito.when(ctx.status(403)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.createEmployee(ctx);

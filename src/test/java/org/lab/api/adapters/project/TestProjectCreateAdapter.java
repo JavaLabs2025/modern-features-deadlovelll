@@ -35,7 +35,7 @@ public class TestProjectCreateAdapter {
     }
 
     @Test
-    public void testCreateProjectSuccess() {
+    void testCreateProjectSuccess() {
         CreateProjectDTO dto = new CreateProjectDTO(
                 "TestProject",
                 "Description",
@@ -43,13 +43,11 @@ public class TestProjectCreateAdapter {
                 List.of(1, 2),
                 List.of(3, 4)
         );
-
-        Mockito.when(ctx.bodyAsClass(CreateProjectDTO.class))
-                .thenReturn(dto);
+        Mockito.when(ctx.bodyAsClass(CreateProjectDTO.class)).thenReturn(dto);
+        Mockito.when(ctx.pathParam("employeeId")).thenReturn("20");
 
         Project mapped = new Project();
-        Mockito.when(mapper.mapToDomain(dto, Project.class))
-                .thenReturn(mapped);
+        Mockito.when(mapper.mapToDomain(dto, Project.class)).thenReturn(mapped);
 
         Project created = new Project();
         created.setId(111);
@@ -59,47 +57,38 @@ public class TestProjectCreateAdapter {
         created.setTeamLeadId(20);
         created.setDeveloperIds(List.of(1, 2));
         created.setTesterIds(List.of(3, 4));
-        created.setStatus(ProjectStatus.OPEN);
-        created.setMilestoneIds(List.of());
-        created.setBugReportIds(List.of());
-        created.setCreatedDate(new Date());
-        created.setCreatedBy(99);
 
-        Mockito.when(useCase.execute(mapped, 20))
-                .thenReturn(created);
+        Mockito.when(
+                useCase.execute(Mockito.eq(mapped),
+                        Mockito.eq(20))
+        ).thenReturn(created);
 
         GetProjectDTO presentation = new GetProjectDTO(
                 created.getId(),
                 created.getName(),
                 created.getDescription(),
-
                 created.getManagerId(),
                 created.getTeamLeadId(),
-
                 created.getDeveloperIds(),
                 created.getTesterIds(),
-
                 created.getStatus(),
-
                 created.getCurrentMilestoneId(),
                 created.getMilestoneIds(),
-
                 created.getBugReportIds(),
-
                 created.getCreatedDate(),
                 created.getCreatedBy(),
                 created.getUpdatedDate(),
                 created.getUpdatedBy()
         );
+        Mockito.when(
+                mapper.mapToPresentation(
+                        created,
+                        GetProjectDTO.class)
+        ).thenReturn(presentation);
 
-        Mockito.when(mapper.mapToPresentation(created, GetProjectDTO.class))
-                .thenReturn(presentation);
-
-        Mockito.when(ctx.status(201)).thenReturn(ctx);
-        Mockito.when(ctx.json(presentation)).thenReturn(ctx);
-
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
+        Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
         adapter.createProject(ctx);
-
         Mockito.verify(ctx).status(201);
         Mockito.verify(ctx).json(presentation);
     }
@@ -114,20 +103,18 @@ public class TestProjectCreateAdapter {
                 List.of()
         );
 
-        Mockito.when(ctx.bodyAsClass(CreateProjectDTO.class))
-                .thenReturn(dto);
+        Mockito.when(ctx.bodyAsClass(CreateProjectDTO.class)).thenReturn(dto);
+        Mockito.when(ctx.pathParam("employeeId")).thenReturn("20");
 
-        Mockito.when(mapper.mapToDomain(dto, Project.class))
-                .thenReturn(new Project());
+        Project mappedProject = new Project();
+        Mockito.when(mapper.mapToDomain(dto, Project.class)).thenReturn(mappedProject);
 
-        Mockito.when(useCase.execute(Mockito.any(), 20))
-                .thenThrow(
-                        new NotPermittedException(
-                                "You do not have permission to perform this operation"
-                        )
-                );
+        Mockito.when(useCase.execute(Mockito.eq(mappedProject), Mockito.eq(20)))
+                .thenThrow(new NotPermittedException(
+                        "You do not have permission to perform this operation"
+                ));
 
-        Mockito.when(ctx.status(403)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.createProject(ctx);

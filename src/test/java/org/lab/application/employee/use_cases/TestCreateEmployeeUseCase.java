@@ -37,7 +37,11 @@ public class TestCreateEmployeeUseCase {
         saved.setId(100);
         saved.setName("Tim Cock");
 
-        Mockito.when(employeeRepository.create(input, 12)).thenReturn(saved);
+        Mockito.when(
+                employeeRepository.create(Mockito.any(Employee.class),
+                        Mockito.eq(1))
+                )
+                .thenReturn(saved);
 
         Employee creator = new Employee();
         creator.setId(1);
@@ -46,9 +50,13 @@ public class TestCreateEmployeeUseCase {
 
         Employee result = useCase.execute(input, 1);
 
+        Assertions.assertNotNull(result);
         Assertions.assertEquals(100, result.getId());
 
-        Mockito.verify(employeeRepository).create(input, 12);
+        Mockito.verify(employeeRepository)
+                .create(Mockito.any(Employee.class),
+                        Mockito.eq(1)
+                );
         Mockito.verify(employeeRepository).getById(1);
     }
 
@@ -63,18 +71,11 @@ public class TestCreateEmployeeUseCase {
         creator.setType(EmployeeType.PROGRAMMER);
 
         Mockito.when(employeeRepository.getById(1)).thenReturn(creator);
-        Mockito.when(employeeRepository.getById(123)).thenReturn(null);
 
-        RuntimeException thrown = Assertions.assertThrows(
-                RuntimeException.class,
+        Assertions.assertThrows(
+                NotPermittedException.class,
                 () -> useCase.execute(input, 1)
         );
-
-        Assertions.assertTrue(
-                thrown.getCause() instanceof ExecutionException &&
-                        ((ExecutionException) thrown.getCause()).getCause() instanceof NotPermittedException
-        );
-        Mockito.verify(employeeRepository).getById(123);
         Mockito.verify(employeeRepository).getById(1);
     }
 
@@ -89,18 +90,11 @@ public class TestCreateEmployeeUseCase {
         creator.setType(EmployeeType.PROGRAMMER);
 
         Mockito.when(employeeRepository.getById(1)).thenThrow(new RuntimeException());
-        Mockito.when(employeeRepository.getById(123)).thenThrow(new RuntimeException());
 
-        RuntimeException thrown = Assertions.assertThrows(
+        Assertions.assertThrows(
                 RuntimeException.class,
                 () -> useCase.execute(input, 1)
         );
-
-        Assertions.assertTrue(
-                thrown.getCause() instanceof ExecutionException &&
-                        ((ExecutionException) thrown.getCause()).getCause() instanceof RuntimeException
-        );
-        Mockito.verify(employeeRepository).getById(123);
         Mockito.verify(employeeRepository).getById(1);
     }
 }

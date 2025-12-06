@@ -51,7 +51,12 @@ public class TestProjectGetAdapter {
         project.setCreatedDate(new Date());
         project.setCreatedBy(99);
 
-        Mockito.when(useCase.execute(10, 50)).thenReturn(project);
+        Mockito.when(
+                useCase.execute(
+                        Mockito.eq(50),
+                        Mockito.eq(10)
+                )
+        ).thenReturn(project);
 
         GetProjectDTO dto = new GetProjectDTO(
                 project.getId(),
@@ -71,11 +76,10 @@ public class TestProjectGetAdapter {
                 project.getUpdatedBy()
         );
 
-        Mockito.when(mapper.mapToPresentation(project, GetProjectDTO.class))
-                .thenReturn(dto);
+        Mockito.when(mapper.mapToPresentation(project, GetProjectDTO.class)).thenReturn(dto);
 
-        Mockito.when(ctx.status(200)).thenReturn(ctx);
-        Mockito.when(ctx.json(dto)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
+        Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.getProject(ctx);
 
@@ -88,10 +92,10 @@ public class TestProjectGetAdapter {
         Mockito.when(ctx.pathParam("employeeId")).thenReturn("10");
         Mockito.when(ctx.pathParam("projectId")).thenReturn("50");
 
-        Mockito.when(useCase.execute(10, 50))
+        Mockito.when(useCase.execute(Mockito.eq(50), Mockito.eq(10)))
                 .thenThrow(new UserNotFoundException());
 
-        Mockito.when(ctx.status(409)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.getProject(ctx);
@@ -105,10 +109,10 @@ public class TestProjectGetAdapter {
         Mockito.when(ctx.pathParam("employeeId")).thenReturn("10");
         Mockito.when(ctx.pathParam("projectId")).thenReturn("50");
 
-        Mockito.when(useCase.execute(10, 50))
+        Mockito.when(useCase.execute(Mockito.eq(50), Mockito.eq(10)))
                 .thenThrow(new NotPermittedException("denied"));
 
-        Mockito.when(ctx.status(403)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.getProject(ctx);
@@ -124,10 +128,10 @@ public class TestProjectGetAdapter {
         Mockito.when(ctx.pathParam("employeeId")).thenReturn("10");
         Mockito.when(ctx.pathParam("projectId")).thenReturn("50");
 
-        Mockito.when(useCase.execute(10, 50))
+        Mockito.when(useCase.execute(Mockito.eq(50), Mockito.eq(10)))
                 .thenThrow(new ProjectNotFoundException());
 
-        Mockito.when(ctx.status(404)).thenReturn(ctx);
+        Mockito.when(ctx.status(Mockito.anyInt())).thenReturn(ctx);
         Mockito.when(ctx.json(Mockito.any())).thenReturn(ctx);
 
         adapter.getProject(ctx);
