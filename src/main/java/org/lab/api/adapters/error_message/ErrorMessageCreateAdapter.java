@@ -32,7 +32,7 @@ public class ErrorMessageCreateAdapter {
             Context ctx
     ) {
         try {
-            int actorId = Integer.parseInt(ctx.pathParam("actorId"));
+            int actorId = Integer.parseInt(ctx.pathParam("employeeId"));
             CreateErrorMessageDTO dto = ctx.bodyAsClass(CreateErrorMessageDTO.class);
             ErrorMessage errorMessage = mapper.mapToDomain(dto, ErrorMessage.class);
             ErrorMessage createdMessage = useCase.execute(

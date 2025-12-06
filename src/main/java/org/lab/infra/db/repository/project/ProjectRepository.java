@@ -64,8 +64,8 @@ public class ProjectRepository {
         ) {
             stmt.setInt(1, projectId);
             List<Object> params = sqlSpec.getParams();
-            for (int i = 1; i < params.size(); i++) {
-                stmt.setObject(i+1, params.get(i));
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i+2, params.get(i));
             }
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

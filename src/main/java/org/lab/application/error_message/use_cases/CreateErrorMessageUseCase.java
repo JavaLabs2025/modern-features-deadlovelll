@@ -23,8 +23,14 @@ public class CreateErrorMessageUseCase {
             ErrorMessage message,
             int employeeId
     ) {
-        this.createErrorMessageValidator.validate(employeeId, message.getProjectId());
-        ErrorMessage createdMessage = this.errorMessageRepository.create(message, employeeId);
+        this.createErrorMessageValidator.validate(
+                employeeId,
+                message.getProjectId()
+        );
+        ErrorMessage createdMessage = this.errorMessageRepository.create(
+                message,
+                employeeId
+        );
         return createdMessage;
     }
 }

@@ -17,7 +17,7 @@ public class ErrorMessageRawDataExtractor {
         row.put("projectId", rs.getString("projectId"));
         row.put("createdBy", rs.getInt("createdBy"));
         row.put("text", rs.getString("text"));
-        row.put("status", rs.getInt("status"));
+        row.put("status", rs.getString("status"));
         return row;
     }
 }

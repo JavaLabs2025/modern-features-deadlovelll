@@ -29,9 +29,9 @@ public class ErrorMessageRepository {
             int employeeId
     ) {
         String sql = """
-        INSERT INTO error_messages (projectId, createdBy, text)
-        VALUES (?, ?, ?,)
-        RETURNING *
+            INSERT INTO error_messages ("projectId", "createdBy", "text")
+            VALUES (?, ?, ?)
+            RETURNING *
         """;
 
         try (
