@@ -8,6 +8,7 @@ import io.javalin.Javalin;
 import org.lab.api.adapters.employee.EmployeeCreateAdapter;
 import org.lab.api.adapters.employee.EmployeeDeleteAdapter;
 import org.lab.api.adapters.employee.EmployeeGetAdapter;
+import org.lab.api.adapters.error_message.ErrorMessageCloseAdapter;
 import org.lab.api.adapters.error_message.ErrorMessageCreateAdapter;
 import org.lab.api.adapters.project.ProjectCreateAdapter;
 import org.lab.api.adapters.project.ProjectDeleteAdapter;
@@ -38,6 +39,9 @@ public class Main {
         ErrorMessageCreateAdapter errorMessageCreateAdapter = injector.getInstance(
                 ErrorMessageCreateAdapter.class
         );
+        ErrorMessageCloseAdapter errorMessageCloseAdapter = injector.getInstance(
+                ErrorMessageCloseAdapter.class
+        );
 
         app.get("/", ctx -> ctx.result("Hello World"));
 
@@ -54,5 +58,6 @@ public class Main {
         app.patch("/ticket/{employeeId}/{ticketId}",  ticketCloseAdapter::closeTicket);
 
         app.post("/error_message/{employeeId}", errorMessageCreateAdapter::createErrorMessage);
+        app.patch("/error_message/{messageId}", errorMessageCloseAdapter::closeMessage);
     }
 }

@@ -2,11 +2,14 @@ package org.lab.infra.di;
 
 import com.google.inject.AbstractModule;
 import org.lab.api.adapters.employee.*;
+import org.lab.api.adapters.error_message.ErrorMessageCloseAdapter;
 import org.lab.api.adapters.error_message.ErrorMessageCreateAdapter;
 import org.lab.api.adapters.project.*;
 import org.lab.api.adapters.ticket.*;
 import org.lab.application.employee.use_cases.*;
 import org.lab.application.error_message.services.CreateErrorMessageValidator;
+import org.lab.application.error_message.services.ErrorMessageValidator;
+import org.lab.application.error_message.use_cases.CloseErrorMessageUseCase;
 import org.lab.application.error_message.use_cases.CreateErrorMessageUseCase;
 import org.lab.application.project.use_cases.*;
 import org.lab.application.ticket.use_cases.*;
@@ -39,6 +42,7 @@ public class AppModule extends AbstractModule {
         bind(TicketCloseValidator.class).asEagerSingleton();
         bind(CreateErrorMessageValidator.class).asEagerSingleton();
         bind(ProjectSpecProvider.class).asEagerSingleton();
+        bind(ErrorMessageValidator.class).asEagerSingleton();
 
         bind(CreateEmployeeUseCase.class).asEagerSingleton();
         bind(DeleteEmployeeUseCase.class).asEagerSingleton();
@@ -50,6 +54,7 @@ public class AppModule extends AbstractModule {
         bind(CreateTicketUseCase.class).asEagerSingleton();
         bind(CloseTicketUseCase.class).asEagerSingleton();
         bind(CreateErrorMessageUseCase.class).asEagerSingleton();
+        bind(CloseErrorMessageUseCase.class).asEagerSingleton();
 
         bind(EmployeeCreateAdapter.class).asEagerSingleton();
         bind(EmployeeDeleteAdapter.class).asEagerSingleton();
@@ -61,5 +66,6 @@ public class AppModule extends AbstractModule {
         bind(TicketCreateAdapter.class).asEagerSingleton();
         bind(TicketCloseAdapter.class).asEagerSingleton();
         bind(ErrorMessageCreateAdapter.class).asEagerSingleton();
+        bind(ErrorMessageCloseAdapter.class).asEagerSingleton();
     }
 }

@@ -24,6 +24,56 @@ public class ErrorMessageRepository {
         errorMessageRawDataExtractor = new ErrorMessageRawDataExtractor();
     }
 
+    public ErrorMessage get(
+            int messageId
+    ) {
+        String sql = """
+            SELECT * FROM error_messages 
+            WHERE id = ?
+        """;
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, messageId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Map<String, Object> row = errorMessageRawDataExtractor.extractErrorMessageRawData(rs);
+                    return objectMapper.mapFromRaw(row, ErrorMessage.class);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+        return null;
+    }
+
+    public ErrorMessage close(
+            int messageId
+    ) {
+        String sql = """
+            UPDATE error_messages
+            SET status = 'CLOSED'
+            WHERE id = ?
+            RETURNING *
+        """;
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, messageId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Map<String, Object> row = errorMessageRawDataExtractor.extractErrorMessageRawData(rs);
+                    return objectMapper.mapFromRaw(row, ErrorMessage.class);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+        return null;
+    }
+
     public ErrorMessage create(
             ErrorMessage message,
             int employeeId
@@ -46,7 +96,7 @@ public class ErrorMessageRepository {
                     Map<String, Object> row = errorMessageRawDataExtractor.extractErrorMessageRawData(rs);
                     return objectMapper.mapFromRaw(row, ErrorMessage.class);
                 } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                    throw new RuntimeException("Message creation failed");
                 }
             }
         } catch (SQLException e) {
