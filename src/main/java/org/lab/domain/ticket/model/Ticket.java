@@ -12,6 +12,7 @@ public class Ticket implements DomainObject {
     private int id;
     private int createdBy;
     private int assignedTo;
+    private int projectId;
     private String description;
     private TicketStatus status;
     private Date createdDate;

@@ -1,5 +1,7 @@
 package org.lab.api.adapters.ticket;
 
+import java.util.Map;
+
 import io.javalin.http.Context;
 import org.lab.application.ticket.dto.CreateTicketDTO;
 import org.lab.application.ticket.dto.GetTicketDTO;
@@ -8,8 +10,6 @@ import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.shared.exceptions.NotPermittedException;
 import org.lab.domain.shared.exceptions.ProjectNotFoundException;
 import org.lab.domain.ticket.model.Ticket;
-
-import java.util.Map;
 
 public class TicketCreateAdapter {
 

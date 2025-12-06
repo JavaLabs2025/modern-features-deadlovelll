@@ -1,9 +1,9 @@
 package org.lab.infra.db.repository.employee.spec;
 
-import org.lab.infra.db.spec.SqlSpec;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lab.infra.db.spec.SqlSpec;
 
 public class TesterSpec implements SqlSpec {
 

@@ -38,7 +38,8 @@ public class EmployeeRepository {
             }
         } catch (SQLException e) {
             throw new DatabaseException();
-        }}
+        }
+    }
 
     public Employee create(
             Employee employee,

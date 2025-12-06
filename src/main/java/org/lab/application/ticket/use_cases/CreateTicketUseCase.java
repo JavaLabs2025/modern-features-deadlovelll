@@ -23,7 +23,11 @@ public class CreateTicketUseCase {
             int projectId
     ) {
         this.ticketCreateValidator.validate(employeeId, projectId);
-        Ticket createdTicket = this.ticketRepository.create(ticket);
+        Ticket createdTicket = this.ticketRepository.create(
+                ticket,
+                employeeId,
+                projectId
+        );
         return createdTicket;
     }
 }

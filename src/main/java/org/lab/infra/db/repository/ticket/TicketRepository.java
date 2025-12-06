@@ -1,9 +1,10 @@
 package org.lab.infra.db.repository.ticket;
 
-import org.lab.domain.emploee.model.Employee;
+import org.lab.core.utils.mapper.ObjectMapper;
 import org.lab.domain.shared.exceptions.DatabaseException;
 import org.lab.domain.ticket.model.Ticket;
 import org.lab.infra.db.client.DatabaseClient;
+import org.lab.infra.db.repository.ticket.data_extractor.TicketRawDataExtractor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +14,36 @@ import java.util.Map;
 
 public class TicketRepository {
 
-    public Ticket get(int ticketId) {
-        return new Ticket();
+    private final DatabaseClient databaseClient;
+    private final ObjectMapper objectMapper;
+    private final TicketRawDataExtractor ticketRawDataExtractor;
+
+    public TicketRepository() {
+        databaseClient = new DatabaseClient();
+        objectMapper = new ObjectMapper();
+        ticketRawDataExtractor = new TicketRawDataExtractor();
+    }
+
+    public Ticket get(
+            int ticketId
+    ) {
+        String sql = "SELECT * FROM tickets where id = ?";
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, ticketId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Map<String, Object> row = ticketRawDataExtractor.extractTicketRawData(rs);
+                    return objectMapper.mapFromRaw(row, Ticket.class);
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
     }
 
     public Ticket create(
@@ -23,7 +52,7 @@ public class TicketRepository {
             int projectId
     ) {
         String sql = """
-        INSERT INTO tickets (createdBy, assignedTo, description, "createdBy")
+        INSERT INTO tickets (createdBy, assignedTo, description, projectId)
         VALUES (?, ?, ?, ?)
         RETURNING *
         """;
@@ -32,16 +61,16 @@ public class TicketRepository {
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setString(1, employee.getName());
-            stmt.setInt(2, employee.getAge());
-            stmt.setString(3, employee.getType().name());
-            stmt.setInt(4, actorId);
+            stmt.setString(1, String.valueOf(employeeId));
+            stmt.setInt(2, ticket.getAssignedTo());
+            stmt.setString(3, ticket.getDescription());
+            stmt.setInt(4, projectId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Map<String, Object> row = employeeRawDataExtractor.extractEmployeeRawData(rs);
-                    return objectMapper.mapFromRaw(row, Employee.class);
+                    Map<String, Object> row = ticketRawDataExtractor.extractTicketRawData(rs);
+                    return objectMapper.mapFromRaw(row, Ticket.class);
                 } else {
-                    throw new RuntimeException("Employee creation failed: no row returned");
+                    throw new RuntimeException("Ticket creation failed: no row returned");
                 }
             }
         } catch (SQLException e) {
