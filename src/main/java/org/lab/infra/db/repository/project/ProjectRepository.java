@@ -52,6 +52,34 @@ public class ProjectRepository {
         }
     }
 
+    public Project getWithSpec(
+            int projectId,
+            Specification spec
+    ) {
+        SqlSpec sqlSpec = (SqlSpec) spec;
+        String sql = "SELECT * FROM projects WHERE id = ? AND " + sqlSpec.toSql();
+        try (
+                Connection conn = DatabaseClient.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, projectId);
+            List<Object> params = sqlSpec.getParams();
+            for (int i = 1; i < params.size(); i++) {
+                stmt.setObject(i+1, params.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Map<String, Object> row = projectRawDataExtractor.extractRawData(rs);
+                    return objectMapper.mapFromRaw(row, Project.class);
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+    }
+
     public Project create(
             Project project,
             int employeeId

@@ -1,7 +1,5 @@
 package org.lab.infra.db.repository.project.data_extractor;
 
-import org.lab.core.constants.project.ProjectStatus;
-
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.lab.core.constants.project.ProjectStatus;
 
 public class ProjectRawDataExtractor {
 
