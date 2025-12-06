@@ -1,5 +1,6 @@
 package org.lab.application.employee.use_cases;
 
+import com.google.inject.Inject;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 
@@ -8,6 +9,7 @@ public class DeleteEmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final EmployeePermissionValidator validator;
 
+    @Inject
     public DeleteEmployeeUseCase(
             EmployeeRepository employeeRepository,
             EmployeePermissionValidator validator

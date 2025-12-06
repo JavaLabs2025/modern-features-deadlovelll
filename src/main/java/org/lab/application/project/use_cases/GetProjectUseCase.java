@@ -1,5 +1,6 @@
 package org.lab.application.project.use_cases;
 
+import com.google.inject.Inject;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
 import org.lab.application.project.services.GetValidator;
@@ -11,6 +12,7 @@ public class GetProjectUseCase {
     private final GetValidator getValidator;
     private final ProjectMembershipValidator projectMembershipValidator;
 
+    @Inject
     public GetProjectUseCase(
             GetValidator getValidator,
             ProjectMembershipValidator projectMembershipValidator

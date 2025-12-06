@@ -2,6 +2,7 @@ package org.lab.api.adapters.employee;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 
 import org.lab.application.employee.dto.GetEmployeeDTO;
@@ -15,6 +16,7 @@ public class EmployeeGetAdapter {
     private final GetEmployeeUseCase useCase;
     private final ObjectMapper mapper;
 
+    @Inject
     public EmployeeGetAdapter(
             GetEmployeeUseCase useCase,
             ObjectMapper mapper

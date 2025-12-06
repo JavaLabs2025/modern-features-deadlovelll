@@ -1,5 +1,6 @@
 package org.lab.application.shared.services;
 
+import com.google.inject.Inject;
 import org.lab.core.constants.employee.EmployeeType;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.NotPermittedException;
@@ -9,6 +10,7 @@ public class EmployeePermissionValidator {
 
     private final EmployeeRepository employeeRepository;
 
+    @Inject
     public EmployeePermissionValidator(
             EmployeeRepository employeeRepository
     ) {

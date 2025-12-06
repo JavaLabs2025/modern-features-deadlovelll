@@ -2,7 +2,9 @@ package org.lab.api.adapters.ticket;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
+
 import org.lab.application.ticket.dto.CreateTicketDTO;
 import org.lab.application.ticket.dto.GetTicketDTO;
 import org.lab.application.ticket.use_cases.CreateTicketUseCase;
@@ -16,6 +18,7 @@ public class TicketCreateAdapter {
     private CreateTicketUseCase useCase;
     private ObjectMapper objectMapper;
 
+    @Inject
     public TicketCreateAdapter(
             CreateTicketUseCase useCase,
             ObjectMapper objectMapper

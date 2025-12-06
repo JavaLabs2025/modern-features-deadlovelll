@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 
 import org.lab.application.project.dto.GetProjectDTO;
@@ -17,6 +18,7 @@ public class ProjectListAdapter {
     private final ListProjectUseCase useCase;
     private final ObjectMapper mapper;
 
+    @Inject
     public ProjectListAdapter(
             ListProjectUseCase useCase,
             ObjectMapper mapper

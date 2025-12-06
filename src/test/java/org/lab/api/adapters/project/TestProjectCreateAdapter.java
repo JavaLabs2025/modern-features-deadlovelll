@@ -40,7 +40,6 @@ public class TestProjectCreateAdapter {
                 "TestProject",
                 "Description",
                 10,
-                20,
                 List.of(1, 2),
                 List.of(3, 4)
         );
@@ -66,7 +65,7 @@ public class TestProjectCreateAdapter {
         created.setCreatedDate(new Date());
         created.setCreatedBy(99);
 
-        Mockito.when(useCase.execute(mapped))
+        Mockito.when(useCase.execute(mapped, 20))
                 .thenReturn(created);
 
         GetProjectDTO presentation = new GetProjectDTO(
@@ -111,7 +110,6 @@ public class TestProjectCreateAdapter {
                 "TestProject",
                 "Description",
                 10,
-                20,
                 List.of(),
                 List.of()
         );
@@ -122,7 +120,7 @@ public class TestProjectCreateAdapter {
         Mockito.when(mapper.mapToDomain(dto, Project.class))
                 .thenReturn(new Project());
 
-        Mockito.when(useCase.execute(Mockito.any()))
+        Mockito.when(useCase.execute(Mockito.any(), 20))
                 .thenThrow(
                         new NotPermittedException(
                                 "You do not have permission to perform this operation"
@@ -149,7 +147,6 @@ public class TestProjectCreateAdapter {
                 "TestProject",
                 "Description",
                 10,
-                20,
                 List.of(),
                 List.of()
         );

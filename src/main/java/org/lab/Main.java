@@ -1,6 +1,9 @@
 package org.lab;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import io.javalin.Javalin;
+
 import org.lab.api.adapters.employee.EmployeeCreateAdapter;
 import org.lab.api.adapters.employee.EmployeeDeleteAdapter;
 import org.lab.api.adapters.employee.EmployeeGetAdapter;
@@ -9,125 +12,24 @@ import org.lab.api.adapters.project.ProjectDeleteAdapter;
 import org.lab.api.adapters.project.ProjectGetAdapter;
 import org.lab.api.adapters.project.ProjectListAdapter;
 import org.lab.api.adapters.ticket.TicketCreateAdapter;
-import org.lab.application.project.services.GetValidator;
-import org.lab.application.project.services.UserSpecFactory;
-import org.lab.application.project.use_cases.CreateProjectUseCase;
-import org.lab.application.project.use_cases.DeleteProjectUseCase;
-import org.lab.application.project.use_cases.GetProjectUseCase;
-import org.lab.application.project.use_cases.ListProjectUseCase;
-import org.lab.application.shared.services.EmployeeProvider;
-import org.lab.application.shared.services.EmployeePermissionValidator;
-import org.lab.application.employee.use_cases.CreateEmployeeUseCase;
-import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
-import org.lab.application.employee.use_cases.GetEmployeeUseCase;
-import org.lab.application.shared.services.ProjectProvider;
-import org.lab.application.ticket.services.TicketCreateValidator;
-import org.lab.application.ticket.services.TicketPermissionValidator;
-import org.lab.application.ticket.use_cases.CreateTicketUseCase;
-import org.lab.core.utils.mapper.ObjectMapper;
-import org.lab.domain.project.services.ProjectMembershipValidator;
-import org.lab.infra.db.repository.employee.EmployeeRepository;
-import org.lab.infra.db.repository.project.ProjectRepository;
-import org.lab.infra.db.repository.ticket.TicketRepository;
+import org.lab.infra.di.AppModule;
 
 public class Main {
 
     public static void main(String[] args) {
+        Injector injector = Guice.createInjector(new AppModule());
         Javalin app = Javalin.create(config -> {}).start(7070);
 
-        EmployeeCreateAdapter createEmployeeAdapter = new EmployeeCreateAdapter(
-                new ObjectMapper(),
-                new CreateEmployeeUseCase(
-                        new EmployeeRepository(),
-                        new EmployeePermissionValidator(
-                                new EmployeeRepository()
-                        )
-                )
-        );
-        EmployeeDeleteAdapter deleteEmployeeAdapter = new EmployeeDeleteAdapter(
-                new DeleteEmployeeUseCase(
-                        new EmployeeRepository(),
-                        new EmployeePermissionValidator(
-                                new EmployeeRepository()
-                        )
-                )
-        );
-        EmployeeGetAdapter getEmployeeAdapter = new EmployeeGetAdapter(
-                new GetEmployeeUseCase(
-                        new EmployeePermissionValidator(
-                                new EmployeeRepository()
-                        ),
-                        new EmployeeProvider(
-                                new EmployeeRepository()
-                        )
-                ),
-                new ObjectMapper()
-        );
+        EmployeeCreateAdapter createEmployeeAdapter = injector.getInstance(EmployeeCreateAdapter.class);
+        EmployeeDeleteAdapter deleteEmployeeAdapter = injector.getInstance(EmployeeDeleteAdapter.class);
+        EmployeeGetAdapter getEmployeeAdapter = injector.getInstance(EmployeeGetAdapter.class);
 
-        ProjectCreateAdapter createProjectAdapter = new ProjectCreateAdapter(
-                new ObjectMapper(),
-                new CreateProjectUseCase(
-                        new ProjectRepository(),
-                        new EmployeePermissionValidator(
-                                new EmployeeRepository()
-                        )
-                )
-        );
-        ProjectGetAdapter projectGetAdapter = new ProjectGetAdapter(
-                new GetProjectUseCase(
-                        new GetValidator(
-                                new ProjectProvider(
-                                        new ProjectRepository()
-                                ),
-                                new EmployeeProvider(
-                                        new EmployeeRepository()
-                                )
-                        ),
-                        new ProjectMembershipValidator()
-                ),
-                new ObjectMapper()
-        );
+        ProjectCreateAdapter createProjectAdapter = injector.getInstance(ProjectCreateAdapter.class);
+        ProjectGetAdapter projectGetAdapter = injector.getInstance(ProjectGetAdapter.class);
+        ProjectDeleteAdapter projectDeleteAdapter = injector.getInstance(ProjectDeleteAdapter.class);
+        ProjectListAdapter projectListAdapter = injector.getInstance(ProjectListAdapter.class);
 
-        ProjectDeleteAdapter projectDeleteAdapter = new ProjectDeleteAdapter(
-                new DeleteProjectUseCase(
-                        new ProjectRepository(),
-                        new GetValidator(
-                                new ProjectProvider(
-                                        new ProjectRepository()
-                                ),
-                                new EmployeeProvider(
-                                        new EmployeeRepository()
-                                )
-                        ),
-                        new ProjectMembershipValidator()
-                )
-        );
-
-        ProjectListAdapter projectListAdapter = new ProjectListAdapter(
-                new ListProjectUseCase(
-                        new ProjectRepository(),
-                        new EmployeeProvider(
-                                new EmployeeRepository()
-                        ),
-                        new UserSpecFactory()
-                ),
-                new ObjectMapper()
-        );
-
-        TicketCreateAdapter ticketCreateAdapter = new TicketCreateAdapter(
-                new CreateTicketUseCase(
-                        new TicketRepository(),
-                        new TicketCreateValidator(
-                                new TicketPermissionValidator(
-                                        new EmployeeRepository()
-                                ),
-                                new ProjectProvider(
-                                        new ProjectRepository()
-                                )
-                        )
-                ),
-                new ObjectMapper()
-        );
+        TicketCreateAdapter ticketCreateAdapter = injector.getInstance(TicketCreateAdapter.class);
 
         app.get("/", ctx -> ctx.result("Hello World"));
 

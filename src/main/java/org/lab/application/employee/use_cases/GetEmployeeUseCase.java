@@ -1,5 +1,6 @@
 package org.lab.application.employee.use_cases;
 
+import com.google.inject.Inject;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.application.shared.services.EmployeeProvider;
 import org.lab.application.shared.services.EmployeePermissionValidator;
@@ -9,6 +10,7 @@ public class GetEmployeeUseCase {
     private EmployeePermissionValidator employeePermissionValidator;
     private EmployeeProvider employeeProvider;
 
+    @Inject
     public GetEmployeeUseCase(
             EmployeePermissionValidator employeePermissionValidator,
             EmployeeProvider employeeProvider

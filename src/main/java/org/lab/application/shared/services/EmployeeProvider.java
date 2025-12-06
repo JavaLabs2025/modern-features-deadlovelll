@@ -1,12 +1,16 @@
 package org.lab.application.shared.services;
 
+import com.google.inject.Inject;
+
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.shared.exceptions.UserNotFoundException;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
 
 public class EmployeeProvider {
+
     private final EmployeeRepository employeeRepository;
 
+    @Inject
     public EmployeeProvider(
             EmployeeRepository employeeRepository
     ) {

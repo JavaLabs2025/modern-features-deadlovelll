@@ -2,6 +2,7 @@ package org.lab.api.adapters.project;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 
 import org.lab.application.project.use_cases.DeleteProjectUseCase;
@@ -13,6 +14,7 @@ public class ProjectDeleteAdapter {
 
     private final DeleteProjectUseCase useCase;
 
+    @Inject
     public ProjectDeleteAdapter(
             DeleteProjectUseCase useCase
     ) {

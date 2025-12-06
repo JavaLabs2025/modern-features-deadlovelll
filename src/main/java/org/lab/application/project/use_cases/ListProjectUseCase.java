@@ -2,6 +2,7 @@ package org.lab.application.project.use_cases;
 
 import java.util.List;
 
+import com.google.inject.Inject;
 import org.lab.application.project.services.UserSpecFactory;
 import org.lab.application.shared.services.EmployeeProvider;
 import org.lab.domain.emploee.model.Employee;
@@ -15,6 +16,7 @@ public class ListProjectUseCase {
     private final EmployeeProvider currentEmployeeProvider;
     private final UserSpecFactory userSpecFactory;
 
+    @Inject
     public ListProjectUseCase(
             ProjectRepository projectRepository,
             EmployeeProvider currentEmployeeProvider,

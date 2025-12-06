@@ -1,5 +1,6 @@
 package org.lab.application.employee.use_cases;
 
+import com.google.inject.Inject;
 import org.lab.application.shared.services.EmployeePermissionValidator;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.infra.db.repository.employee.EmployeeRepository;
@@ -9,6 +10,7 @@ public class CreateEmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final EmployeePermissionValidator validator;
 
+    @Inject
     public CreateEmployeeUseCase(
             EmployeeRepository employeeRepository,
             EmployeePermissionValidator validator

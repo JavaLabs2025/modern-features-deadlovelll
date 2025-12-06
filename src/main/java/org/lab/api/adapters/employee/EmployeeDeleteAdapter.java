@@ -2,6 +2,7 @@ package org.lab.api.adapters.employee;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 import org.lab.application.employee.use_cases.DeleteEmployeeUseCase;
 import org.lab.domain.shared.exceptions.NotPermittedException;
@@ -10,6 +11,7 @@ public class EmployeeDeleteAdapter {
 
     private final DeleteEmployeeUseCase useCase;
 
+    @Inject
     public EmployeeDeleteAdapter(
             DeleteEmployeeUseCase useCase
     ) {

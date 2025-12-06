@@ -1,5 +1,6 @@
 package org.lab.api.adapters.project;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 
 import org.lab.application.project.dto.CreateProjectDTO;
@@ -16,6 +17,7 @@ public class ProjectCreateAdapter {
     private final ObjectMapper objectMapper;
     private final CreateProjectUseCase useCase;
 
+    @Inject
     public ProjectCreateAdapter(
             ObjectMapper objectMapper,
             CreateProjectUseCase useCase

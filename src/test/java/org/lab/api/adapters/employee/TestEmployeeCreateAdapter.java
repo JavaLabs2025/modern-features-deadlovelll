@@ -36,8 +36,7 @@ public class TestEmployeeCreateAdapter {
         CreateEmployeeDTO dto = new CreateEmployeeDTO(
                 "John",
                 30,
-                EmployeeType.PROGRAMMER,
-                99
+                EmployeeType.PROGRAMMER
         );
 
         Employee mappedEmployee = new Employee();
@@ -68,7 +67,7 @@ public class TestEmployeeCreateAdapter {
         Mockito.when(mapper.mapToDomain(dto, Employee.class))
                 .thenReturn(mappedEmployee);
 
-        Mockito.when(useCase.execute(mappedEmployee, dto.creatorId()))
+        Mockito.when(useCase.execute(mappedEmployee, 99))
                 .thenReturn(createdEmployee);
 
         Mockito.when(mapper.mapToPresentation(createdEmployee, GetEmployeeDTO.class))
@@ -88,15 +87,14 @@ public class TestEmployeeCreateAdapter {
         CreateEmployeeDTO dto = new CreateEmployeeDTO(
                 "John",
                 30,
-                EmployeeType.PROGRAMMER,
-                99
+                EmployeeType.PROGRAMMER
         );
 
         Mockito.when(ctx.bodyAsClass(CreateEmployeeDTO.class)).thenReturn(dto);
         Mockito.when(mapper.mapToDomain(dto, Employee.class))
                 .thenReturn(new Employee());
 
-        Mockito.when(useCase.execute(Mockito.any(), Mockito.eq(dto.creatorId())))
+        Mockito.when(useCase.execute(Mockito.any(), Mockito.eq(99)))
                 .thenThrow(new NotPermittedException(
                         "You do not have permission to perform this operation"
                 ));
@@ -117,8 +115,7 @@ public class TestEmployeeCreateAdapter {
         CreateEmployeeDTO dto = new CreateEmployeeDTO(
                 "John",
                 30,
-                EmployeeType.PROGRAMMER,
-                99
+                EmployeeType.PROGRAMMER
         );
 
         Mockito.when(ctx.bodyAsClass(CreateEmployeeDTO.class)).thenReturn(dto);

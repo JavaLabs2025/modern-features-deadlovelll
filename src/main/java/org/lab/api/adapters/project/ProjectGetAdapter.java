@@ -2,6 +2,7 @@ package org.lab.api.adapters.project;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
 import io.javalin.http.Context;
 
 import org.lab.application.project.dto.GetProjectDTO;
@@ -17,6 +18,7 @@ public class ProjectGetAdapter {
     private final GetProjectUseCase useCase;
     private final ObjectMapper mapper;
 
+    @Inject
     public ProjectGetAdapter(
             GetProjectUseCase useCase,
             ObjectMapper mapper

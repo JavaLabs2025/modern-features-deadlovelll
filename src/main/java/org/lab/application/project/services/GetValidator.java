@@ -2,6 +2,7 @@ package org.lab.application.project.services;
 
 import java.util.concurrent.*;
 
+import com.google.inject.Inject;
 import org.lab.application.shared.services.ProjectProvider;
 import org.lab.domain.emploee.model.Employee;
 import org.lab.domain.project.model.Project;
@@ -14,6 +15,7 @@ public class GetValidator {
     private final ProjectProvider projectProvider;
     private final EmployeeProvider currentEmployeeProvider;
 
+    @Inject
     public GetValidator(
             ProjectProvider projectProvider,
             EmployeeProvider currentEmployeeProvider
