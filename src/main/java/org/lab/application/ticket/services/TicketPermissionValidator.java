@@ -19,8 +19,9 @@ public class TicketPermissionValidator {
 
     public void validate(int employeeId) {
         Employee creatorEmployee = employeeRepository.getById(employeeId);
+        System.out.println(creatorEmployee);
         if (
-                creatorEmployee.getType() != EmployeeType.MANAGER ||
+                creatorEmployee.getType() != EmployeeType.MANAGER &&
                         creatorEmployee.getType() != EmployeeType.TEAMLEAD
         ) {
             throw new NotPermittedException("Only manager or team lead can create tickets");

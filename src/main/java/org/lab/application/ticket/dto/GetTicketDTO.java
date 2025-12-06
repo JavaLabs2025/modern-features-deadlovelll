@@ -9,6 +9,7 @@ public record GetTicketDTO(
         int id,
         int createdBy,
         int assignedTo,
+        int projectId,
         String description,
         TicketStatus status,
         Date createdDate,

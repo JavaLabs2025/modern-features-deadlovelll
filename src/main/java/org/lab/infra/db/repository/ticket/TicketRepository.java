@@ -52,7 +52,7 @@ public class TicketRepository {
             int projectId
     ) {
         String sql = """
-        INSERT INTO tickets (createdBy, assignedTo, description, projectId)
+        INSERT INTO tickets ("createdBy", "assignedTo", description, "projectId")
         VALUES (?, ?, ?, ?)
         RETURNING *
         """;
@@ -61,7 +61,7 @@ public class TicketRepository {
                 Connection conn = DatabaseClient.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setString(1, String.valueOf(employeeId));
+            stmt.setInt(1, employeeId);
             stmt.setInt(2, ticket.getAssignedTo());
             stmt.setString(3, ticket.getDescription());
             stmt.setInt(4, projectId);
