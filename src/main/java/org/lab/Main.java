@@ -11,6 +11,7 @@ import org.lab.api.adapters.project.ProjectCreateAdapter;
 import org.lab.api.adapters.project.ProjectDeleteAdapter;
 import org.lab.api.adapters.project.ProjectGetAdapter;
 import org.lab.api.adapters.project.ProjectListAdapter;
+import org.lab.api.adapters.ticket.TicketCloseAdapter;
 import org.lab.api.adapters.ticket.TicketCreateAdapter;
 import org.lab.infra.di.AppModule;
 
@@ -30,6 +31,7 @@ public class Main {
         ProjectListAdapter projectListAdapter = injector.getInstance(ProjectListAdapter.class);
 
         TicketCreateAdapter ticketCreateAdapter = injector.getInstance(TicketCreateAdapter.class);
+        TicketCloseAdapter ticketCloseAdapter = injector.getInstance(TicketCloseAdapter.class);
 
         app.get("/", ctx -> ctx.result("Hello World"));
 
@@ -43,5 +45,6 @@ public class Main {
         app.delete("/project/{projectId}/{employeeId}", projectDeleteAdapter::deleteProject);
 
         app.post("/ticket/{employeeId}/{projectId}",  ticketCreateAdapter::createTicket);
+        app.patch("/ticket/{employeeId}/{ticketId}",  ticketCloseAdapter::closeTicket);
     }
 }

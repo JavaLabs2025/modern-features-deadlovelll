@@ -84,7 +84,10 @@ public class TicketRepository {
             int ticketId
     ) {
         String sql = """
-        UPDATE tickets SET status = 'CLOSED' WHERE id = ?";
+            UPDATE tickets
+            SET status = 'CLOSED'
+            WHERE id = ?
+            RETURNING *
         """;
         try (
                 Connection conn = DatabaseClient.getConnection();
