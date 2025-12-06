@@ -15,7 +15,7 @@ public class TesterSpec implements SqlSpec {
 
     @Override
     public String toSql() {
-        return "? IN testerIds";
+        return "? IN \"testerIds\"";
     }
 
     @Override

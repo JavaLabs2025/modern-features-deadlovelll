@@ -15,7 +15,7 @@ public class TeamLeaderSpec implements SqlSpec {
 
     @Override
     public String toSql() {
-        return "teamLeadId = ?";
+        return "\"teamLeadId\" = ?";
     }
 
     @Override

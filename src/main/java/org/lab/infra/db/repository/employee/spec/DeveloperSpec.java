@@ -15,7 +15,7 @@ public class DeveloperSpec implements SqlSpec {
 
     @Override
     public String toSql() {
-        return "? IN developerIds";
+        return "? IN \"developerIds\"";
     }
 
     @Override
