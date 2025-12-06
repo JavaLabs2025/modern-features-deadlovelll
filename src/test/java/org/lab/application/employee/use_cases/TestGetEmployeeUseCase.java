@@ -52,7 +52,7 @@ public class TestGetEmployeeUseCase {
 
         Mockito.when(employeeRepository.getById(1)).thenReturn(manager);
 
-        RuntimeException thrown = Assertions.assertThrows(
+        Assertions.assertThrows(
                 NotPermittedException.class,
                 () -> useCase.execute(2, 1)
         );
@@ -67,7 +67,7 @@ public class TestGetEmployeeUseCase {
         Mockito.when(employeeRepository.getById(1)).thenReturn(manager);
         Mockito.when(employeeRepository.getById(2)).thenReturn(null);
 
-        RuntimeException thrown = Assertions.assertThrows(
+        Assertions.assertThrows(
                 UserNotFoundException.class,
                 () -> useCase.execute(2, 1)
         );

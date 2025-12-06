@@ -44,7 +44,7 @@ public class TestDeleteEmployeeUseCase {
 
         Mockito.when(employeeRepository.getById(1)).thenReturn(manager);
 
-        RuntimeException thrown = Assertions.assertThrows(
+        Assertions.assertThrows(
                 NotPermittedException.class,
                 () -> useCase.execute(2, 1)
         );

@@ -1,7 +1,5 @@
 package org.lab.application.employee.use_cases;
 
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
